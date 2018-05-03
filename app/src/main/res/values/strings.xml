@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">头条视频助手</string>
+
+
+    <string name="permission_write_external_storage">下载视频需要获取读写SD卡权限</string>
+    <string name="permission_write_external_denied">没有该权限,将无法将视频保存到本地！</string>
+    <string name="button_allow">好的</string>
+    <string name="button_cancel">取消</string>
+</resources>
