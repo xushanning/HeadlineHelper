@@ -4,7 +4,12 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.orhanobut.logger.Logger;
 import com.xu.headlinehelper.R;
@@ -15,6 +20,10 @@ import com.xu.headlinehelper.util.ToastUtil;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import butterknife.BindView;
+import me.jessyan.progressmanager.ProgressListener;
+import me.jessyan.progressmanager.ProgressManager;
+import me.jessyan.progressmanager.body.ProgressInfo;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -26,7 +35,14 @@ import permissions.dispatcher.RuntimePermissions;
  * @author xusn10
  */
 @RuntimePermissions
-public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> implements IMainContract.IMainView {
+public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> implements IMainContract.IMainView, ProgressListener {
+    @BindView(R.id.dl_main)
+    DrawerLayout dlMain;
+    @BindView(R.id.nv_drawer)
+    NavigationView nvDrawer;
+    @BindView(R.id.tb_main)
+    Toolbar tbMain;
+    private ActionBarDrawerToggle drawerToggle;
     /**
      * 视频网页的正则
      */
@@ -46,6 +62,33 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
             Logger.d(originalUrl);
             handleUrl(originalUrl);
         }
+        initDrawer();
+
+
+    }
+
+    /**
+     * 初始化侧滑栏相关
+     */
+    private void initDrawer() {
+        setSupportActionBar(tbMain);
+        drawerToggle = new ActionBarDrawerToggle(this, dlMain, tbMain, R.string.drawer_open, R.string.drawer_close);
+        dlMain.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+        nvDrawer.setCheckedItem(R.id.drawer_about_me0);
+        nvDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.drawer_about_me0:
+
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -59,6 +102,7 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
             String videoName = matcher.group(1);
             String shareUrl = matcher.group(2);
             mPresenter.getVideoUrl(shareUrl);
+            ProgressManager.getInstance().addResponseListener("url", this);
         }
     }
 
@@ -108,4 +152,13 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
         MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
+    @Override
+    public void onProgress(ProgressInfo progressInfo) {
+
+    }
+
+    @Override
+    public void onError(long id, Exception e) {
+
+    }
 }

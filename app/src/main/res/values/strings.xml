@@ -6,4 +6,13 @@
     <string name="permission_write_external_denied">没有该权限,将无法将视频保存到本地！</string>
     <string name="button_allow">好的</string>
     <string name="button_cancel">取消</string>
+
+    <!--侧滑栏-->
+    <string name="drawer_my_download">我的下载</string>
+    <string name="drawer_about_me">关于作者</string>
+    <string name="drawer_about_soft">关于软件</string>
+    <string name="drawer_feedback">我要反馈</string>
+    <string name="drawer_how_to_use">使用教程</string>
+    <string name="drawer_open">打开</string>
+    <string name="drawer_close">关闭</string>
 </resources>

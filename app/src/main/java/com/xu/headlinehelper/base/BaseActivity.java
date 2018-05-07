@@ -3,6 +3,7 @@ package com.xu.headlinehelper.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.jaeger.library.StatusBarUtil;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
@@ -25,6 +26,7 @@ public abstract class BaseActivity<T extends IBaseContract.IBasePresenter> exten
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(setLayoutId());
+        StatusBarUtil.setTranslucentForImageViewInFragment(this, 0, null);
         mPresenter = setPresenter();
         if (mPresenter == null) {
             throw new NullPointerException("presenter 不能为空!");
