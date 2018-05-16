@@ -1,4 +1,4 @@
-package com.xu.headlinehelper.ui.mian;
+package com.xu.headlinehelper.ui.activity.main;
 
 import android.util.Base64;
 
@@ -8,6 +8,7 @@ import com.xu.headlinehelper.bean.VideoAddressBean;
 import com.xu.headlinehelper.net.HttpConstants;
 import com.xu.headlinehelper.net.RetrofitFactory;
 import com.xu.headlinehelper.net.RetryRequestWithDelay;
+import com.xu.headlinehelper.ui.activity.main.IMainContract;
 import com.xu.headlinehelper.util.TransformUtil;
 
 import java.util.Random;

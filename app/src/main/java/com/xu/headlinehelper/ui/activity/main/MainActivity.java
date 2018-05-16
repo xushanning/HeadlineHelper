@@ -1,10 +1,12 @@
-package com.xu.headlinehelper.ui.mian;
+package com.xu.headlinehelper.ui.activity.main;
 
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -13,10 +15,13 @@ import android.view.MenuItem;
 
 import com.orhanobut.logger.Logger;
 import com.xu.headlinehelper.R;
+import com.xu.headlinehelper.adapter.HomeFragmentPagerAdapter;
 import com.xu.headlinehelper.base.BaseActivity;
 import com.xu.headlinehelper.bean.VideoAddressBean;
 import com.xu.headlinehelper.util.ToastUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,8 +45,12 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
     DrawerLayout dlMain;
     @BindView(R.id.nv_drawer)
     NavigationView nvDrawer;
-    @BindView(R.id.tb_main)
+    @BindView(R.id.toolbar)
     Toolbar tbMain;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
     private ActionBarDrawerToggle drawerToggle;
     /**
      * 视频网页的正则
@@ -63,8 +72,7 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
             handleUrl(originalUrl);
         }
         initDrawer();
-
-
+        initTabLayout();
     }
 
     /**
@@ -72,6 +80,7 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
      */
     private void initDrawer() {
         setSupportActionBar(tbMain);
+        getSupportActionBar().setTitle(getString(R.string.app_name));
         drawerToggle = new ActionBarDrawerToggle(this, dlMain, tbMain, R.string.drawer_open, R.string.drawer_close);
         dlMain.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
@@ -89,6 +98,22 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
                 return true;
             }
         });
+
+    }
+
+    /**
+     * 初始化tabLayout
+     */
+    private void initTabLayout() {
+        List<String> titles = new ArrayList<>();
+        titles.add("全部(0)");
+        titles.add("下载中(0)");
+        titles.add("已完成(0)");
+        HomeFragmentPagerAdapter pagerAdapter = new HomeFragmentPagerAdapter(getSupportFragmentManager(), titles);
+
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(1, false);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override

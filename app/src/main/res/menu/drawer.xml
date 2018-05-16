@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/drawer_about_me0"
+            android:icon="@mipmap/star"
+            android:title="@string/drawer_my_download" />
+        <item
+            android:id="@+id/drawer_about_me1"
+            android:icon="@mipmap/star"
+            android:title="@string/drawer_about_me" />
+        <item
+            android:id="@+id/drawer_about_me2"
+            android:icon="@mipmap/star"
+            android:title="@string/drawer_about_soft" />
+
+        <item
+            android:id="@+id/drawer_about_me3"
+            android:icon="@mipmap/star"
+            android:title="@string/drawer_feedback" />
+
+        <item
+            android:id="@+id/drawer_about_me4"
+            android:icon="@mipmap/star"
+            android:title="@string/drawer_how_to_use" />
+
+    </group>
+</menu>

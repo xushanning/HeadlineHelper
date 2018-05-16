@@ -1,4 +1,4 @@
-package com.xu.headlinehelper.ui.mian;
+package com.xu.headlinehelper.ui.activity.main;
 
 import com.xu.headlinehelper.base.IBaseContract;
 import com.xu.headlinehelper.bean.VideoAddressBean;
