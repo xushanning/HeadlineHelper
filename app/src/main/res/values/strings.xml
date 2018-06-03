@@ -15,4 +15,10 @@
     <string name="drawer_how_to_use">使用教程</string>
     <string name="drawer_open">打开</string>
     <string name="drawer_close">关闭</string>
+
+    <!--选择栏-->
+    <string name="menu_item_start_all">全部开始</string>
+    <string name="menu_item_suspend_all">全部暂停</string>
+    <string name="menu_item_batch_operation">批量操作</string>
+    <string name="menu_item_download_setting">下载设置</string>
 </resources>

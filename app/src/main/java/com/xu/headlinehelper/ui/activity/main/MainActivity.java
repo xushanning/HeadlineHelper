@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.orhanobut.logger.Logger;
@@ -20,6 +21,7 @@ import com.xu.headlinehelper.base.BaseActivity;
 import com.xu.headlinehelper.bean.VideoAddressBean;
 import com.xu.headlinehelper.util.ToastUtil;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -71,16 +73,48 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
             Logger.d(originalUrl);
             handleUrl(originalUrl);
         }
+        initToolBar();
         initDrawer();
         initTabLayout();
+    }
+
+    /**
+     * 初始化toolBar
+     */
+    private void initToolBar() {
+        setSupportActionBar(tbMain);
+        getSupportActionBar().setTitle(getString(R.string.app_name));
+        tbMain.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int menuID = item.getItemId();
+                switch (menuID) {
+                    case R.id.action_start_all:
+
+                        break;
+                    case R.id.action_suspend_all:
+
+                        break;
+                    case R.id.action_batch_operation:
+
+                        break;
+                    case R.id.action_setting:
+
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+
     }
 
     /**
      * 初始化侧滑栏相关
      */
     private void initDrawer() {
-        setSupportActionBar(tbMain);
-        getSupportActionBar().setTitle(getString(R.string.app_name));
+
         drawerToggle = new ActionBarDrawerToggle(this, dlMain, tbMain, R.string.drawer_open, R.string.drawer_close);
         dlMain.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
@@ -185,5 +219,27 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
     @Override
     public void onError(long id, Exception e) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item, menu);
+        setIconsVisible(menu, true);
+        return true;
+    }
+
+    private void setIconsVisible(Menu menu, boolean flag) {
+        if (menu != null) {
+            try {
+                //如果不为空,就反射拿到menu的setOptionalIconsVisible方法
+                Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                //暴力访问该方法
+                method.setAccessible(true);
+                //调用该方法显示icon
+                method.invoke(menu, flag);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

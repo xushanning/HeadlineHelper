@@ -9,9 +9,9 @@ import com.xu.headlinehelper.adapter.quick.HomeListQuickAdapter;
 import com.xu.headlinehelper.base.BaseFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
+import zlc.season.rxdownload3.core.Mission;
 
 /**
  * @author xu
@@ -37,12 +37,8 @@ public class HomeListFragment extends BaseFragment<IHomeListContract.IHomeListPr
 
     @Override
     public void initOthers() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            list.add("第" + i + "条");
-        }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        HomeListQuickAdapter quickAdapter = new HomeListQuickAdapter(list);
+        HomeListQuickAdapter quickAdapter = new HomeListQuickAdapter(new ArrayList<Mission>());
         rvHomeList.setLayoutManager(linearLayoutManager);
         rvHomeList.setAdapter(quickAdapter);
     }

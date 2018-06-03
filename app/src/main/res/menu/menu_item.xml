@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_start_all"
+        android:icon="@mipmap/down_load"
+        android:title="@string/menu_item_start_all"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_suspend_all"
+        android:icon="@mipmap/suspend"
+        android:title="@string/menu_item_suspend_all"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_batch_operation"
+        android:icon="@mipmap/batch_operation"
+        android:title="@string/menu_item_batch_operation"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_setting"
+        android:icon="@mipmap/setting"
+        android:title="@string/menu_item_download_setting"
+        app:showAsAction="never" />
+
+</menu>
