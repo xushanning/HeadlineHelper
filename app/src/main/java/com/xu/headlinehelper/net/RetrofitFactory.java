@@ -6,7 +6,6 @@ import com.orhanobut.logger.Logger;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import me.jessyan.progressmanager.ProgressManager;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -40,7 +39,7 @@ public class RetrofitFactory {
                 .addInterceptor(requestInterceptor)
                 .addInterceptor(responseInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY))
                 .addInterceptor(headerInterceptor);
-        return ProgressManager.getInstance().with(builder).build();
+        return builder.build();
 
     }
 

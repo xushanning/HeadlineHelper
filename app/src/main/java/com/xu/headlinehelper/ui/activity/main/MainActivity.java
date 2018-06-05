@@ -19,6 +19,7 @@ import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.adapter.HomeFragmentPagerAdapter;
 import com.xu.headlinehelper.base.BaseActivity;
 import com.xu.headlinehelper.bean.VideoAddressBean;
+import com.xu.headlinehelper.ui.activity.settting.SettingActivity;
 import com.xu.headlinehelper.util.ToastUtil;
 
 import java.lang.reflect.Method;
@@ -28,9 +29,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
-import me.jessyan.progressmanager.ProgressListener;
-import me.jessyan.progressmanager.ProgressManager;
-import me.jessyan.progressmanager.body.ProgressInfo;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -42,7 +40,7 @@ import permissions.dispatcher.RuntimePermissions;
  * @author xusn10
  */
 @RuntimePermissions
-public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> implements IMainContract.IMainView, ProgressListener {
+public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> implements IMainContract.IMainView {
     @BindView(R.id.dl_main)
     DrawerLayout dlMain;
     @BindView(R.id.nv_drawer)
@@ -67,7 +65,7 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
     @Override
     public void initOthers() {
         String shareUrl = "https://m.365yg.com/group/6530825337272533512/?iid=29858226621&app=news_article&timestamp=1524014770&tt_from=android_share&utm_medium=toutiao_android&utm_campaign=client_share";
-        mPresenter.getVideoUrl(shareUrl);
+        //mPresenter.getVideoUrl(shareUrl);
         String originalUrl = getIntent().getStringExtra(Intent.EXTRA_TEXT);
         if (originalUrl != null) {
             Logger.d(originalUrl);
@@ -99,7 +97,8 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
 
                         break;
                     case R.id.action_setting:
-
+                        Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
+                        startActivity(settingIntent);
                         break;
                     default:
                         break;
@@ -158,10 +157,8 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
     private void handleUrl(String originalUrl) {
         Matcher matcher = pattern.matcher(originalUrl);
         if (matcher.find()) {
-            String videoName = matcher.group(1);
             String shareUrl = matcher.group(2);
             mPresenter.getVideoUrl(shareUrl);
-            ProgressManager.getInstance().addResponseListener("url", this);
         }
     }
 
@@ -211,15 +208,6 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
         MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
-    @Override
-    public void onProgress(ProgressInfo progressInfo) {
-
-    }
-
-    @Override
-    public void onError(long id, Exception e) {
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

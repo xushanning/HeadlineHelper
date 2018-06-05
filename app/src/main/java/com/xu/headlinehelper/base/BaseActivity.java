@@ -49,9 +49,7 @@ public abstract class BaseActivity<T extends IBaseContract.IBasePresenter> exten
     /**
      * 初始化其他
      */
-    public void initOthers() {
-
-    }
+    public abstract void initOthers();
 
 
     @Override

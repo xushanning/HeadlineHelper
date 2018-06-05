@@ -21,4 +21,23 @@
     <string name="menu_item_suspend_all">全部暂停</string>
     <string name="menu_item_batch_operation">批量操作</string>
     <string name="menu_item_download_setting">下载设置</string>
+
+    <!--数字选择器-->
+    <string name="minus">-</string>
+    <string name="add">+</string>
+
+    <string name="setting_title">设置</string>
+    <string name="setting_simultaneously_download_count">同时下载任务数</string>
+    <string name="setting_retry_count">自动重试次数</string>
+    <string name="setting_retry_count_explain">当出错或者连接中断时自动重连%d$1次</string>
+    <string name="setting_save_path">选择存储路径</string>
+    <string name="setting_current_path">当前:</string>
+    <string name="setting_only_wifi">只在WiFi环境下下载</string>
+    <string name="setting_show_notification">显示通知栏</string>
+    <string name="setting_download_complete_shock">震动</string>
+    <string name="setting_download_complete_shock_explain">下载完成时震动提示</string>
+
+
+    <string name="string_default">-</string>
+
 </resources>

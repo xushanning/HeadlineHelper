@@ -25,6 +25,7 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.settting.SettingActivity" />
     </application>
 
 </manifest>
