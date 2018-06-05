@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'org.greenrobot.greendao'
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
@@ -21,6 +21,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    greendao {
+        schemaVersion 1
+        targetGenDir 'src/main/java'
+        daoPackage 'com.xu.headlinehelper.db.dao'
     }
 }
 
@@ -55,4 +60,6 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.tencent.bugly:crashreport:2.6.6'
     implementation 'com.kyleduo.switchbutton:library:2.0.0'
+    implementation 'org.greenrobot:greendao:3.2.0'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.0'
 }
