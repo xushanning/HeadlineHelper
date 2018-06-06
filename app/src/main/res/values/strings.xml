@@ -17,6 +17,7 @@
     <string name="drawer_close">关闭</string>
 
     <!--选择栏-->
+    <string name="menu_item_new_task">新任务</string>
     <string name="menu_item_start_all">全部开始</string>
     <string name="menu_item_suspend_all">全部暂停</string>
     <string name="menu_item_batch_operation">批量操作</string>
@@ -37,7 +38,10 @@
     <string name="setting_download_complete_shock">震动</string>
     <string name="setting_download_complete_shock_explain">下载完成时震动提示</string>
 
-
+    <!--新下载任务界面-->
+    <string name="new_task_title">新建下载任务</string>
+    <string name="new_task_hint">输入或者粘贴分享的视频地址</string>
+    <string name="new_task_download">下载</string>
     <string name="string_default">-</string>
 
 </resources>

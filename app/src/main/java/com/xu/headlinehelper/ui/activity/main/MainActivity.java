@@ -19,6 +19,7 @@ import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.adapter.HomeFragmentPagerAdapter;
 import com.xu.headlinehelper.base.BaseActivity;
 import com.xu.headlinehelper.bean.VideoAddressBean;
+import com.xu.headlinehelper.ui.activity.newtask.NewTaskActivity;
 import com.xu.headlinehelper.ui.activity.settting.SettingActivity;
 import com.xu.headlinehelper.util.ToastUtil;
 
@@ -87,6 +88,10 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
             public boolean onMenuItemClick(MenuItem item) {
                 int menuID = item.getItemId();
                 switch (menuID) {
+                    case R.id.action_new_task:
+                        Intent newTaskIntent = new Intent(MainActivity.this, NewTaskActivity.class);
+                        startActivity(newTaskIntent);
+                        break;
                     case R.id.action_start_all:
 
                         break;
