@@ -7,4 +7,8 @@
     <!--字体深颜色-->
     <color name="text_dark_color">#434343</color>
     <color name="text_light_color">#9E9E9E</color>
+
+    <color name="bg_frame_color">#E1E1E1</color>
+    <!--下载按钮不可点击颜色-->
+    <color name="button_unpressed_bg">#EDEDED</color>
 </resources>
