@@ -14,25 +14,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.orhanobut.logger.Logger;
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.adapter.HomeFragmentPagerAdapter;
 import com.xu.headlinehelper.base.BaseActivity;
 import com.xu.headlinehelper.bean.VideoAddressBean;
 import com.xu.headlinehelper.ui.activity.newtask.NewTaskActivity;
 import com.xu.headlinehelper.ui.activity.settting.SettingActivity;
-import com.xu.headlinehelper.util.VideoUrlUtil;
 import com.xu.headlinehelper.util.ToastUtil;
-import com.xu.headlinehelper.util.TransformUtil;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
-import io.reactivex.functions.Consumer;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -163,6 +157,11 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
     public void showDownLoadWindow(VideoAddressBean.DataBean.VideoListBean videoListBean) {
         //先固定下在第一个
         MainActivityPermissionsDispatcher.downLoadVideoWithPermissionCheck(this, videoListBean.getVideo_1().getMain_url());
+    }
+
+    @Override
+    public void analysisUrlFailed(String msg) {
+        ToastUtil.toastShort(this, msg);
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)

@@ -3,7 +3,7 @@ package com.xu.headlinehelper.ui.activity.main;
 import com.orhanobut.logger.Logger;
 import com.xu.headlinehelper.base.BasePresenter;
 import com.xu.headlinehelper.bean.VideoAddressBean;
-import com.xu.headlinehelper.util.VideoUrlUtil;
+import com.xu.headlinehelper.util.VideoUrlAnalysis;
 
 import io.reactivex.functions.Consumer;
 
@@ -15,17 +15,18 @@ public class MainPresenter extends BasePresenter<IMainContract.IMainView> implem
 
     @Override
     public void getVideoUrl(String shareUrl) {
-        VideoUrlUtil videoUrlUtil = new VideoUrlUtil();
-        videoUrlUtil.getDownloadObservable(shareUrl)
+        new VideoUrlAnalysis().getDownloadObservable(shareUrl)
                 .subscribe(new Consumer<VideoAddressBean.DataBean.VideoListBean>() {
                     @Override
                     public void accept(VideoAddressBean.DataBean.VideoListBean videoListBean) throws Exception {
                         Logger.d(videoListBean.getVideo_1().getMain_url());
+                        mView.showDownLoadWindow(videoListBean);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Logger.d(throwable.getMessage());
+                        mView.analysisUrlFailed(throwable.getMessage());
                     }
                 });
     }

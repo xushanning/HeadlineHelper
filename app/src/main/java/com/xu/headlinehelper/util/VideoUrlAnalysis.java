@@ -21,9 +21,10 @@ import io.reactivex.functions.Function;
 
 /**
  * @author 言吾許
+ *         视频地址解析
  */
 
-public class VideoUrlUtil {
+public class VideoUrlAnalysis {
     /**
      * 视频网页的正则
      */

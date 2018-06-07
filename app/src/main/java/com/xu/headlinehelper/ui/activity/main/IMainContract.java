@@ -15,6 +15,14 @@ public interface IMainContract extends IBaseContract {
          * @param videoListBean 视频信息列表
          */
         void showDownLoadWindow(VideoAddressBean.DataBean.VideoListBean videoListBean);
+
+        /**
+         * 分析视频真实地址失败
+         *
+         * @param msg 失败原因
+         */
+        void analysisUrlFailed(String msg);
+
     }
 
     interface IMainPresenter extends IBasePresenter<IMainView> {

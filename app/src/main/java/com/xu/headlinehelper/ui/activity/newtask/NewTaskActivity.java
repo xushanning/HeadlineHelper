@@ -1,19 +1,18 @@
 package com.xu.headlinehelper.ui.activity.newtask;
 
 import android.graphics.drawable.GradientDrawable;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
-import com.orhanobut.logger.Logger;
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.base.BaseActivity;
+import com.xu.headlinehelper.bean.VideoAddressBean;
+import com.xu.headlinehelper.util.ToastUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.functions.Consumer;
 
@@ -64,6 +63,16 @@ public class NewTaskActivity extends BaseActivity<INewTaskContract.INewTaskPrese
     @Override
     public void loadClipboardData(String data) {
         etInput.setText(data);
+    }
+
+    @Override
+    public void analysisUrlFailed(String msg) {
+        ToastUtil.toastShort(this, msg);
+    }
+
+    @Override
+    public void showDownLoadWindow(VideoAddressBean.DataBean.VideoListBean videoListBean) {
+
     }
 
 
