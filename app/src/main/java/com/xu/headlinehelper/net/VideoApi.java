@@ -4,6 +4,8 @@ import com.xu.headlinehelper.bean.VideoAddressBean;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Url;
 
 /**
@@ -17,6 +19,7 @@ public interface VideoApi {
      * @param shareUrl 分享地址
      * @return observable
      */
+    @Headers({"User-Agent:Mozilla/5.0(WindowsNT6.1;rv:2.0.1)Gecko/20100101Firefox/4.0.1", "Referer:referrer"})
     @GET
     Observable<String> getVideoHtml(@Url String shareUrl);
 

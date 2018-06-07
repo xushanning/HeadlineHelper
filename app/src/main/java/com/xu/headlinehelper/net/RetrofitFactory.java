@@ -80,7 +80,6 @@ public class RetrofitFactory {
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request.Builder builder = chain.request().newBuilder();
-
             return chain.proceed(builder.build());
         }
     };

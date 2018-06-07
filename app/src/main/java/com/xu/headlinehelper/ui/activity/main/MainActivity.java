@@ -21,7 +21,9 @@ import com.xu.headlinehelper.base.BaseActivity;
 import com.xu.headlinehelper.bean.VideoAddressBean;
 import com.xu.headlinehelper.ui.activity.newtask.NewTaskActivity;
 import com.xu.headlinehelper.ui.activity.settting.SettingActivity;
+import com.xu.headlinehelper.util.VideoUrlUtil;
 import com.xu.headlinehelper.util.ToastUtil;
+import com.xu.headlinehelper.util.TransformUtil;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
+import io.reactivex.functions.Consumer;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -53,10 +56,6 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     private ActionBarDrawerToggle drawerToggle;
-    /**
-     * 视频网页的正则
-     */
-    Pattern pattern = Pattern.compile("【(.+)】\\n(http.+)");
 
     @Override
     public int setLayoutId() {
@@ -65,12 +64,12 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
 
     @Override
     public void initOthers() {
-        String shareUrl = "https://m.365yg.com/group/6530825337272533512/?iid=29858226621&app=news_article&timestamp=1524014770&tt_from=android_share&utm_medium=toutiao_android&utm_campaign=client_share";
-        //mPresenter.getVideoUrl(shareUrl);
+        String shareUrl = "http://m.toutiaoimg.cn/group/6563953907100290317/?iid=0&app=news_article&timestamp=1528355726&tt_from=mobile_qq&utm_source=mobile_qq&utm_medium=toutiao_ios&utm_campaign=client_share";
+        // String shareUrl = "http://m.toutiaoimg.cn/a6454038434225848845/?iid=33715723214&app=news_article&tt_from=mobile_qq&utm_source=mobile_qq&utm_medium=toutiao_ios&utm_campaign=client_share";
+
         String originalUrl = getIntent().getStringExtra(Intent.EXTRA_TEXT);
         if (originalUrl != null) {
-            Logger.d(originalUrl);
-            handleUrl(originalUrl);
+            mPresenter.getVideoUrl(shareUrl);
         }
         initToolBar();
         initDrawer();
@@ -159,13 +158,6 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
         return new MainPresenter();
     }
 
-    private void handleUrl(String originalUrl) {
-        Matcher matcher = pattern.matcher(originalUrl);
-        if (matcher.find()) {
-            String shareUrl = matcher.group(2);
-            mPresenter.getVideoUrl(shareUrl);
-        }
-    }
 
     @Override
     public void showDownLoadWindow(VideoAddressBean.DataBean.VideoListBean videoListBean) {

@@ -4,7 +4,7 @@ package com.xu.headlinehelper.db.dbmanager;
 import com.xu.headlinehelper.MyApplication;
 import com.xu.headlinehelper.db.dao.DownLoadSettingDbBeanDao;
 import com.xu.headlinehelper.db.dbbean.DownLoadSettingDbBean;
-import com.xu.headlinehelper.net.ApiExecption;
+import com.xu.headlinehelper.net.ApiException;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -31,7 +31,7 @@ public class DBManager {
                     e.onNext(dbBean);
                     e.onComplete();
                 } else {
-                    throw new ApiExecption("获取设置失败");
+                    throw new ApiException("获取设置失败");
                 }
             }
         });

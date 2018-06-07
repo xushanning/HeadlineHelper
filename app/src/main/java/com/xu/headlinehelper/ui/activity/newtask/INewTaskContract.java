@@ -25,5 +25,12 @@ public interface INewTaskContract extends IBaseContract {
          * @param context 上下文
          */
         void getClipboardData(Context context);
+
+        /**
+         * 下载视频，首先判断url是否合法
+         *
+         * @param originalUrl 用户原始输入
+         */
+        void downloadVideo(String originalUrl);
     }
 }
