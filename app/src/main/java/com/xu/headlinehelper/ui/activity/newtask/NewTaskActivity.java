@@ -10,6 +10,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.base.BaseActivity;
 import com.xu.headlinehelper.bean.VideoAddressBean;
+import com.xu.headlinehelper.ui.activity.basedownload.BaseDownloadActivity;
 import com.xu.headlinehelper.util.ToastUtil;
 
 import butterknife.BindView;
@@ -21,7 +22,7 @@ import io.reactivex.functions.Consumer;
  *         新建下载任务的activity
  */
 
-public class NewTaskActivity extends BaseActivity<INewTaskContract.INewTaskPresenter> implements INewTaskContract.INewTaskView {
+public class NewTaskActivity extends BaseDownloadActivity<INewTaskContract.INewTaskPresenter> implements INewTaskContract.INewTaskView {
     @BindView(R.id.et_input)
     EditText etInput;
     @BindView(R.id.tv_download)
@@ -68,11 +69,6 @@ public class NewTaskActivity extends BaseActivity<INewTaskContract.INewTaskPrese
     @Override
     public void analysisUrlFailed(String msg) {
         ToastUtil.toastShort(this, msg);
-    }
-
-    @Override
-    public void showDownLoadWindow(VideoAddressBean.DataBean.VideoListBean videoListBean) {
-
     }
 
 

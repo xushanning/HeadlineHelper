@@ -42,6 +42,10 @@ public class VideoUrlAnalysis {
      */
     private Pattern videoPattern = Pattern.compile("(?<=videoId: ').+(?=')");
     /**
+     * 视频标题的正则
+     */
+    private Pattern titlePattern = Pattern.compile("<title>(.+)</title>");
+    /**
      * 视频播放网页的base url
      */
     private static final String BASE_365_URL = "https://www.365yg.com/";
@@ -49,6 +53,10 @@ public class VideoUrlAnalysis {
      * 随机数的位数
      */
     private static final int RANDOM_COUNT = 16;
+    /**
+     * 视频名称
+     */
+    private String videoTitle = "未知";
 
     /**
      * 获取视频真实地址
@@ -56,7 +64,7 @@ public class VideoUrlAnalysis {
      * @param originalUrl 分享的链接
      * @return 真实地址的列表
      */
-    public Observable<VideoAddressBean.DataBean.VideoListBean> getDownloadObservable(final String originalUrl) {
+    public Observable<VideoAddressBean.DataBean> getDownloadObservable(final String originalUrl) {
         return Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> e) throws Exception {
@@ -86,17 +94,19 @@ public class VideoUrlAnalysis {
         }).flatMap(new Function<String, ObservableSource<String>>() {
             @Override
             public ObservableSource<String> apply(String s) throws Exception {
-                Logger.d(s);
                 return RetrofitFactory.getVideoApi().getVideoHtml(s);
             }
         }).flatMap(new Function<String, ObservableSource<VideoAddressBean>>() {
             @Override
             public ObservableSource<VideoAddressBean> apply(String s) throws Exception {
-                Logger.d(s);
-                Matcher matcher = videoPattern.matcher(s);
-                if (matcher.find()) {
-                    String videoId = matcher.group(0);
-                    Logger.d(videoId + "");
+                Matcher videoPatcher = videoPattern.matcher(s);
+                Matcher titlePatcher = titlePattern.matcher(s);
+                if (videoPatcher.find()) {
+                    //把视频名称抓出来
+                    if (titlePatcher.find()) {
+                        videoTitle = titlePatcher.group(1);
+                    }
+                    String videoId = videoPatcher.group(0);
                     //1.将/video/urls/v/1/toutiao/mp4/{videoid}?r={Math.random()}，进行crc32加密。
                     Random random = new Random();
                     StringBuilder randomResult = new StringBuilder();
@@ -115,12 +125,15 @@ public class VideoUrlAnalysis {
                     throw new ApiException("解析错误!");
                 }
             }
-        }).map(new Function<VideoAddressBean, VideoAddressBean.DataBean.VideoListBean>() {
+        }).map(new Function<VideoAddressBean, VideoAddressBean.DataBean>() {
                    @Override
-                   public VideoAddressBean.DataBean.VideoListBean apply(VideoAddressBean videoAddressBean) throws Exception {
+                   public VideoAddressBean.DataBean apply(VideoAddressBean videoAddressBean) throws Exception {
                        if (videoAddressBean.getMessage().equals(HttpConstants.MESSAGE_SUCCESS)) {
-                           VideoAddressBean.DataBean.VideoListBean videoList = videoAddressBean.getData().getVideo_list();
-                           return decodeVideoAddress(videoList);
+                           //把这个闲着的user_id变成视频的名称
+                           VideoAddressBean.DataBean dataBean = videoAddressBean.getData();
+                           dataBean.setUser_id(videoTitle);
+                           dataBean.setVideo_list(decodeVideoAddress(dataBean.getVideo_list()));
+                           return dataBean;
                        } else {
                            throw new ApiException("未包含视频地址!");
                        }
@@ -153,6 +166,6 @@ public class VideoUrlAnalysis {
                        return new String(Base64.decode(base64.getBytes(), Base64.DEFAULT));
                    }
                }
-        ).compose(TransformUtil.<VideoAddressBean.DataBean.VideoListBean>defaultSchedulers());
+        ).compose(TransformUtil.<VideoAddressBean.DataBean>defaultSchedulers());
     }
 }

@@ -1,7 +1,5 @@
 package com.xu.headlinehelper.ui.activity.main;
 
-import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -9,15 +7,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.adapter.HomeFragmentPagerAdapter;
-import com.xu.headlinehelper.base.BaseActivity;
-import com.xu.headlinehelper.bean.VideoAddressBean;
+import com.xu.headlinehelper.ui.activity.basedownload.BaseDownloadActivity;
 import com.xu.headlinehelper.ui.activity.newtask.NewTaskActivity;
 import com.xu.headlinehelper.ui.activity.settting.SettingActivity;
 import com.xu.headlinehelper.util.ToastUtil;
@@ -27,18 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.OnNeverAskAgain;
-import permissions.dispatcher.OnPermissionDenied;
-import permissions.dispatcher.OnShowRationale;
-import permissions.dispatcher.PermissionRequest;
-import permissions.dispatcher.RuntimePermissions;
 
 /**
  * @author xusn10
  */
-@RuntimePermissions
-public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> implements IMainContract.IMainView {
+public class MainActivity extends BaseDownloadActivity<IMainContract.IMainPresenter> implements IMainContract.IMainView {
     @BindView(R.id.dl_main)
     DrawerLayout dlMain;
     @BindView(R.id.nv_drawer)
@@ -60,7 +49,7 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
     public void initOthers() {
         String shareUrl = "http://m.toutiaoimg.cn/group/6563953907100290317/?iid=0&app=news_article&timestamp=1528355726&tt_from=mobile_qq&utm_source=mobile_qq&utm_medium=toutiao_ios&utm_campaign=client_share";
         // String shareUrl = "http://m.toutiaoimg.cn/a6454038434225848845/?iid=33715723214&app=news_article&tt_from=mobile_qq&utm_source=mobile_qq&utm_medium=toutiao_ios&utm_campaign=client_share";
-
+        mPresenter.getVideoUrl(shareUrl);
         String originalUrl = getIntent().getStringExtra(Intent.EXTRA_TEXT);
         if (originalUrl != null) {
             mPresenter.getVideoUrl(shareUrl);
@@ -152,56 +141,9 @@ public class MainActivity extends BaseActivity<IMainContract.IMainPresenter> imp
         return new MainPresenter();
     }
 
-
-    @Override
-    public void showDownLoadWindow(VideoAddressBean.DataBean.VideoListBean videoListBean) {
-        //先固定下在第一个
-        MainActivityPermissionsDispatcher.downLoadVideoWithPermissionCheck(this, videoListBean.getVideo_1().getMain_url());
-    }
-
     @Override
     public void analysisUrlFailed(String msg) {
         ToastUtil.toastShort(this, msg);
-    }
-
-    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    public void downLoadVideo(String videoAddressUrl) {
-        mPresenter.downLoadVideo(videoAddressUrl);
-    }
-
-    @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    public void showRationale(final PermissionRequest request) {
-        new AlertDialog.Builder(this)
-                .setCancelable(false)
-                .setMessage(R.string.permission_write_external_storage)
-                .setPositiveButton(R.string.button_allow, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        request.proceed();
-                    }
-                })
-                .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        request.cancel();
-                    }
-                }).show();
-    }
-
-    @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    public void showPermissionDenied() {
-        ToastUtil.toastShort(this, getString(R.string.permission_write_external_denied));
-    }
-
-    @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    public void showPermissionNeverAskAgain() {
-        ToastUtil.toastShort(this, getString(R.string.permission_write_external_denied));
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
 

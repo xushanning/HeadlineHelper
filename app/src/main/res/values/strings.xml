@@ -42,6 +42,8 @@
     <string name="new_task_title">新建下载任务</string>
     <string name="new_task_hint">输入或者粘贴分享的视频地址</string>
     <string name="new_task_download">下载</string>
+    <string name="new_task_definition">选择分辨率</string>
+    <string name="new_task_definition_item">分辨率:%1$s   %2$sMb</string>
     <string name="string_default">-</string>
 
 </resources>

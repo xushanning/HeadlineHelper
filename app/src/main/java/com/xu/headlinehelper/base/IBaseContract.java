@@ -14,8 +14,8 @@ public interface IBaseContract {
         /**
          * 绑定生命周期
          *
-         * @param <T>
-         * @return
+         * @param <T> 泛型
+         * @return 泛型
          */
         <T> LifecycleTransformer<T> bindToLife();
 
