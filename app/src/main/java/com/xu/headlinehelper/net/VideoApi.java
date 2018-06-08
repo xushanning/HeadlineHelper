@@ -19,7 +19,6 @@ public interface VideoApi {
      * @param shareUrl 分享地址
      * @return observable
      */
-    @Headers({"User-Agent:Mozilla/5.0(WindowsNT6.1;rv:2.0.1)Gecko/20100101Firefox/4.0.1", "Referer:referrer"})
     @GET
     Observable<String> getVideoHtml(@Url String shareUrl);
 

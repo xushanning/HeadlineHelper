@@ -26,7 +26,7 @@ public class MyApplication extends Application {
         mInstance = this;
         initLogger();
         initDatabase();
-        initDownload();
+        //initDownload();
     }
 
     private void initLogger() {
