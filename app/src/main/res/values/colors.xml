@@ -11,4 +11,6 @@
     <color name="bg_frame_color">#E1E1E1</color>
     <!--下载按钮不可点击颜色-->
     <color name="button_unpressed_bg">#EDEDED</color>
+
+    <color name="color_loading_Shimmer">#999999</color>
 </resources>

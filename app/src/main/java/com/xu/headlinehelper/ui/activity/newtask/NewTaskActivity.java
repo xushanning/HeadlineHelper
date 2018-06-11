@@ -71,12 +71,17 @@ public class NewTaskActivity extends BaseDownloadActivity<INewTaskContract.INewT
         ToastUtil.toastShort(this, msg);
     }
 
+    @Override
+    public void downloading() {
+        super.downloading();
+        finish();
+    }
 
     @OnClick({R.id.tv_download, R.id.img_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_download:
-                mPresenter.downloadVideo(etInput.getText().toString());
+                mPresenter.getVideoUrl(etInput.getText().toString());
                 break;
             case R.id.img_back:
                 finish();

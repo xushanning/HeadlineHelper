@@ -46,4 +46,10 @@
     <string name="new_task_definition_item">分辨率:%1$s   %2$sMb</string>
     <string name="string_default">-</string>
 
+    <!--下载任务list界面-->
+    <string name="downloading_start">开始</string>
+    <string name="downloading_suspend">暂停</string>
+
+    <string name="no_data">没有正在下载的视频哦</string>
+
 </resources>

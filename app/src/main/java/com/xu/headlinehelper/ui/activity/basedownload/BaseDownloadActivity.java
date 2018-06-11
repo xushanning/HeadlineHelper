@@ -17,6 +17,7 @@ import com.xu.headlinehelper.adapter.quick.DefinitionListQuickAdapter;
 import com.xu.headlinehelper.base.BaseActivity;
 import com.xu.headlinehelper.bean.VideoAddressBean;
 import com.xu.headlinehelper.bean.VideoInfoBean;
+import com.xu.headlinehelper.db.dbmanager.CustomMission;
 import com.xu.headlinehelper.util.ImageLoaderUtil;
 import com.xu.headlinehelper.util.ToastUtil;
 
@@ -42,17 +43,17 @@ public abstract class BaseDownloadActivity<T extends IBaseDownloadContract.IBase
     /**
      * 检查权限并且下载
      *
-     * @param downloadUrl 下载地址
-     *                    由于BaseDownloadActivityPermissionsDispatcher 这个类非public，所以在
-     *                    main activity中不能直接调用，因此写成这种形式
+     * @param customMission 下载地址
+     *                      由于BaseDownloadActivityPermissionsDispatcher 这个类非public，所以在
+     *                      main activity中不能直接调用，因此写成这种形式
      */
-    public void permissionCheckAndDownload(String downloadUrl) {
-        BaseDownloadActivityPermissionsDispatcher.downLoadVideoWithPermissionCheck(this, downloadUrl);
+    public void permissionCheckAndDownload(CustomMission customMission) {
+        BaseDownloadActivityPermissionsDispatcher.downLoadVideoWithPermissionCheck(this, customMission);
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    public void downLoadVideo(String videoAddressUrl) {
-        mPresenter.downloadVideo(videoAddressUrl);
+    public void downLoadVideo(CustomMission customMission) {
+        mPresenter.downloadVideo(customMission);
     }
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -113,8 +114,10 @@ public abstract class BaseDownloadActivity<T extends IBaseDownloadContract.IBase
                 mDownloadUrl = downloadUrl;
             }
         });
-        tvTitle.setText(dataBean.getUser_id());
-        ImageLoaderUtil.loadImage(this, dataBean.getPoster_url(), imgThumbnail);
+        final String title = dataBean.getUser_id();
+        final String portraitUrl = dataBean.getPoster_url();
+        tvTitle.setText(title);
+        ImageLoaderUtil.loadImage(this, portraitUrl, imgThumbnail);
         imgClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +130,8 @@ public abstract class BaseDownloadActivity<T extends IBaseDownloadContract.IBase
                 if (mDownloadUrl == null) {
                     ToastUtil.toastShort(getApplicationContext(), "请选择分辨率!");
                 } else {
-                    permissionCheckAndDownload(mDownloadUrl);
+                    CustomMission customMission = new CustomMission(mDownloadUrl, title, portraitUrl);
+                    permissionCheckAndDownload(customMission);
                     dialog.dismiss();
                 }
 

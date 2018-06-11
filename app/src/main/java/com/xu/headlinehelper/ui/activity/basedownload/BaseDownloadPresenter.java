@@ -3,6 +3,7 @@ package com.xu.headlinehelper.ui.activity.basedownload;
 import com.orhanobut.logger.Logger;
 import com.xu.headlinehelper.base.BasePresenter;
 import com.xu.headlinehelper.bean.VideoAddressBean;
+import com.xu.headlinehelper.db.dbmanager.CustomMission;
 import com.xu.headlinehelper.util.VideoUrlAnalysis;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -39,8 +40,8 @@ public abstract class BaseDownloadPresenter<T extends IBaseDownloadContract.IBas
     }
 
     @Override
-    public void downloadVideo(String videoAddressUrl) {
-        RxDownload.INSTANCE.create(videoAddressUrl, true)
+    public void downloadVideo(CustomMission customMission) {
+        RxDownload.INSTANCE.create(customMission, true)
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(mView.<Status>bindToLife())
                 .subscribe(new Consumer<Status>() {

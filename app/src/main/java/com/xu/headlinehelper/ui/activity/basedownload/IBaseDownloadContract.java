@@ -2,6 +2,7 @@ package com.xu.headlinehelper.ui.activity.basedownload;
 
 import com.xu.headlinehelper.base.IBaseContract;
 import com.xu.headlinehelper.bean.VideoAddressBean;
+import com.xu.headlinehelper.db.dbmanager.CustomMission;
 
 /**
  * @author 许 on 2018/6/7.
@@ -40,8 +41,8 @@ public interface IBaseDownloadContract extends IBaseContract {
         /**
          * 下载视频
          *
-         * @param videoAddressUrl 视频真实地址
+         * @param customMission 视频真实地址、描述、头像  信息类
          */
-        void downloadVideo(String videoAddressUrl);
+        void downloadVideo(CustomMission customMission);
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +17,8 @@ import com.xu.headlinehelper.adapter.HomeFragmentPagerAdapter;
 import com.xu.headlinehelper.ui.activity.basedownload.BaseDownloadActivity;
 import com.xu.headlinehelper.ui.activity.newtask.NewTaskActivity;
 import com.xu.headlinehelper.ui.activity.settting.SettingActivity;
+import com.xu.headlinehelper.ui.fragment.downloading.DownloadingFragment;
+import com.xu.headlinehelper.ui.fragment.homelist.HomeListFragment;
 import com.xu.headlinehelper.util.ToastUtil;
 
 import java.lang.reflect.Method;
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import zlc.season.rxdownload3.RxDownload;
 
 /**
  * @author xusn10
@@ -39,6 +43,7 @@ public class MainActivity extends BaseDownloadActivity<IMainContract.IMainPresen
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     private ActionBarDrawerToggle drawerToggle;
+    private DownloadingFragment downloadingFragment;
 
     @Override
     public int setLayoutId() {
@@ -75,10 +80,10 @@ public class MainActivity extends BaseDownloadActivity<IMainContract.IMainPresen
                         startActivity(newTaskIntent);
                         break;
                     case R.id.action_start_all:
-
+                        RxDownload.INSTANCE.startAll().subscribe();
                         break;
                     case R.id.action_suspend_all:
-
+                        RxDownload.INSTANCE.stopAll().subscribe();
                         break;
                     case R.id.action_batch_operation:
 
@@ -94,6 +99,13 @@ public class MainActivity extends BaseDownloadActivity<IMainContract.IMainPresen
             }
         });
 
+    }
+
+    @Override
+    public void downloading() {
+        super.downloading();
+        //通知fragment刷新list
+        downloadingFragment.refreshDownloadingList();
     }
 
     /**
@@ -126,10 +138,15 @@ public class MainActivity extends BaseDownloadActivity<IMainContract.IMainPresen
      */
     private void initTabLayout() {
         List<String> titles = new ArrayList<>();
-        titles.add("全部(0)");
-        titles.add("下载中(0)");
-        titles.add("已完成(0)");
-        HomeFragmentPagerAdapter pagerAdapter = new HomeFragmentPagerAdapter(getSupportFragmentManager(), titles);
+        titles.add("下载中");
+        titles.add("已完成");
+        List<Fragment> fragments = new ArrayList<>();
+        downloadingFragment = DownloadingFragment.newInstance();
+        fragments.add(downloadingFragment);
+        HomeListFragment homeListFragment = HomeListFragment.newInstance();
+        fragments.add(homeListFragment);
+
+        HomeFragmentPagerAdapter pagerAdapter = new HomeFragmentPagerAdapter(getSupportFragmentManager(), titles, fragments);
 
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(1, false);

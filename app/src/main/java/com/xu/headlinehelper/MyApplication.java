@@ -7,8 +7,10 @@ import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.xu.headlinehelper.db.dao.DaoMaster;
 import com.xu.headlinehelper.db.dao.DaoSession;
+import com.xu.headlinehelper.db.dbmanager.CustomSqliteActor;
 
 import zlc.season.rxdownload3.core.DownloadConfig;
+import zlc.season.rxdownload3.database.SQLiteActor;
 import zlc.season.rxdownload3.extension.ApkInstallExtension;
 import zlc.season.rxdownload3.extension.ApkOpenExtension;
 
@@ -26,7 +28,7 @@ public class MyApplication extends Application {
         mInstance = this;
         initLogger();
         initDatabase();
-        //initDownload();
+        initDownload();
     }
 
     private void initLogger() {
@@ -44,7 +46,7 @@ public class MyApplication extends Application {
                 .enableDb(true)
                 .enableAutoStart(true)
                 .setDebug(true)
-                //  .setDbActor(new CustomSqliteActor(this))
+                .setDbActor(new CustomSqliteActor(this))
                 .enableService(true)
                 .enableNotification(true)
                 .addExtension(ApkInstallExtension.class)
@@ -54,7 +56,7 @@ public class MyApplication extends Application {
     }
 
     private void initDatabase() {
-        DaoMaster.DevOpenHelper mHelper = new DaoMaster.DevOpenHelper(this, "TouTiao-db", null);
+        DaoMaster.DevOpenHelper mHelper = new DaoMaster.DevOpenHelper(this, "video-helper-db", null);
         SQLiteDatabase db = mHelper.getWritableDatabase();
         DaoMaster mDaoMaster = new DaoMaster(db);
         mDaoSession = mDaoMaster.newSession();
