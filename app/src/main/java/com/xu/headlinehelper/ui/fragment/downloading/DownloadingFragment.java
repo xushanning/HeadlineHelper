@@ -26,6 +26,7 @@ public class DownloadingFragment extends BaseFragment<IDownloadingContract.IDown
     @BindView(R.id.status_view)
     MultipleStatusView statusView;
 
+
     private DownloadingQuickAdapter downloadingQuickAdapter;
 
     public static DownloadingFragment newInstance() {
