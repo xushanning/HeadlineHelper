@@ -1,12 +1,16 @@
 package com.xu.headlinehelper.ui.fragment.downloading;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
+import com.orhanobut.logger.Logger;
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.adapter.quick.DownloadingQuickAdapter;
 import com.xu.headlinehelper.base.BaseFragment;
+import com.xu.headlinehelper.ui.activity.newtask.NewTaskActivity;
 import com.xu.headlinehelper.view.MultipleStatusView;
 
 import java.util.ArrayList;
@@ -50,6 +54,13 @@ public class DownloadingFragment extends BaseFragment<IDownloadingContract.IDown
         downloadingQuickAdapter = new DownloadingQuickAdapter(new ArrayList<Mission>());
         rvDownloading.setAdapter(downloadingQuickAdapter);
         statusView.showLoading();
+        statusView.setOnRetryClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), NewTaskActivity.class);
+                startActivity(intent);
+            }
+        });
         refreshDownloadingList();
     }
 

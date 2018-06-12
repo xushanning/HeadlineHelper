@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.xu.headlinehelper.R;
 
@@ -25,19 +26,19 @@ public class MultipleStatusView extends RelativeLayout {
     /**
      * 无书局布局id
      */
-    private int noDataViewResId;
+    //  private int noDataViewResId;
     /**
      * 错误布局id
      */
-    private int errorViewResId;
+    // private int errorViewResId;
     /**
      * 内容布局id
      */
-    private int contentViewResId;
+    /// private int contentViewResId;
     /**
      * 正在加载布局id
      */
-    private int loadingViewResId;
+    //  private int loadingViewResId;
     /**
      * 无布局
      */
@@ -65,7 +66,7 @@ public class MultipleStatusView extends RelativeLayout {
      */
     private List<Integer> otherId = new ArrayList<>();
 
-    private OnClickListener onClickListener;
+    private OnClickListener onNewTaskListener;
 
     public MultipleStatusView(Context context) {
         this(context, null);
@@ -77,12 +78,12 @@ public class MultipleStatusView extends RelativeLayout {
 
     public MultipleStatusView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MultipleStatusView, defStyleAttr, 0);
-        noDataViewResId = typedArray.getResourceId(R.styleable.MultipleStatusView_noDataView, R.layout.view_no_data);
-        errorViewResId = typedArray.getResourceId(R.styleable.MultipleStatusView_errorView, R.layout.view_error);
-        loadingViewResId = typedArray.getResourceId(R.styleable.MultipleStatusView_loadingView, R.layout.view_loading);
-        contentViewResId = typedArray.getResourceId(R.styleable.MultipleStatusView_contentView, NULL_RESOURCE_ID);
-        typedArray.recycle();
+//        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MultipleStatusView, defStyleAttr, 0);
+//        noDataViewResId = typedArray.getResourceId(R.styleable.MultipleStatusView_noDataView, R.layout.view_no_data);
+//        errorViewResId = typedArray.getResourceId(R.styleable.MultipleStatusView_errorView, R.layout.view_error);
+//        loadingViewResId = typedArray.getResourceId(R.styleable.MultipleStatusView_loadingView, R.layout.view_loading);
+//        contentViewResId = typedArray.getResourceId(R.styleable.MultipleStatusView_contentView, NULL_RESOURCE_ID);
+        // typedArray.recycle();
         mInflater = LayoutInflater.from(context);
     }
 
@@ -98,10 +99,10 @@ public class MultipleStatusView extends RelativeLayout {
      */
     public final void showContent() {
         viewStatus = STATUS_CONTENT;
-        if (contentView == null && contentViewResId != NULL_RESOURCE_ID) {
-            contentView = mInflater.inflate(contentViewResId, null);
-            addView(contentView, 0, DEFAULT_LAYOUT_PARAMS);
-        }
+//        if (contentView == null && contentViewResId != NULL_RESOURCE_ID) {
+//            contentView = mInflater.inflate(contentViewResId, null);
+//            addView(contentView, 0, DEFAULT_LAYOUT_PARAMS);
+//        }
         showContentView();
     }
 
@@ -111,11 +112,11 @@ public class MultipleStatusView extends RelativeLayout {
     public final void showNoData() {
         viewStatus = STATUS_NO_NETWORK;
         if (noDataView == null) {
-            noDataView = mInflater.inflate(noDataViewResId, null);
+            noDataView = mInflater.inflate(R.layout.view_no_data, null);
             otherId.add(noDataView.getId());
-            //在这里加载重试等布局
-            ConstraintLayout constraintLayout = noDataView.findViewById(R.id.cl_no_data);
-            constraintLayout.setOnClickListener(onClickListener);
+            //在这里加载新建任务布局
+            TextView tvNewTask = noDataView.findViewById(R.id.tv_new_task);
+            tvNewTask.setOnClickListener(onNewTaskListener);
             addView(noDataView, 0, DEFAULT_LAYOUT_PARAMS);
         }
         showViewById(noDataView.getId());
@@ -127,7 +128,7 @@ public class MultipleStatusView extends RelativeLayout {
     public final void showLoading() {
         viewStatus = STATUS_LOADING;
         if (loadingView == null) {
-            loadingView = mInflater.inflate(loadingViewResId, null);
+            loadingView = mInflater.inflate(R.layout.view_loading, null);
             //荧光动画
             ShimmerLayout shimmerLayout = loadingView.findViewById(R.id.sl_loading);
             shimmerLayout.setShimmerAnimationDuration(1500);
@@ -145,7 +146,7 @@ public class MultipleStatusView extends RelativeLayout {
     public final void showError() {
         viewStatus = STATUS_ERROR;
         if (errorView == null) {
-            errorView = mInflater.inflate(errorViewResId, null);
+            errorView = mInflater.inflate(R.layout.view_error, null);
             otherId.add(errorView.getId());
             addView(errorView, 0, DEFAULT_LAYOUT_PARAMS);
         }
@@ -171,10 +172,10 @@ public class MultipleStatusView extends RelativeLayout {
     /**
      * 无网络重试点击
      *
-     * @param onRetryClickListener 重试事件
+     * @param onNewTaskListener 重试事件
      */
-    public void setOnRetryClickListener(OnClickListener onRetryClickListener) {
-        this.onClickListener = onRetryClickListener;
+    public void setOnRetryClickListener(OnClickListener onNewTaskListener) {
+        this.onNewTaskListener = onNewTaskListener;
     }
 
     /**
@@ -187,8 +188,8 @@ public class MultipleStatusView extends RelativeLayout {
         if (otherId != null) {
             otherId.clear();
         }
-        if (onClickListener != null) {
-            onClickListener = null;
+        if (onNewTaskListener != null) {
+            onNewTaskListener = null;
         }
         mInflater = null;
     }
