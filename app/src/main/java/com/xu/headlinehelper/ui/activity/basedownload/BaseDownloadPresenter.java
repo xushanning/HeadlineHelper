@@ -9,6 +9,7 @@ import com.xu.headlinehelper.util.VideoUrlAnalysis;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import zlc.season.rxdownload3.RxDownload;
+import zlc.season.rxdownload3.core.Failed;
 import zlc.season.rxdownload3.core.Status;
 import zlc.season.rxdownload3.core.Succeed;
 import zlc.season.rxdownload3.extension.ApkInstallExtension;
@@ -43,10 +44,10 @@ public abstract class BaseDownloadPresenter<T extends IBaseDownloadContract.IBas
     public void downloadVideo(CustomMission customMission) {
         RxDownload.INSTANCE.create(customMission, true)
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(mView.<Status>bindToLife())
                 .subscribe(new Consumer<Status>() {
                     @Override
                     public void accept(Status status) throws Exception {
+                        Logger.d(status instanceof Failed);
                         mView.downloading();
                     }
                 }, new Consumer<Throwable>() {

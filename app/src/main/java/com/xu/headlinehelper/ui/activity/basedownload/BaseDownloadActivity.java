@@ -130,7 +130,8 @@ public abstract class BaseDownloadActivity<T extends IBaseDownloadContract.IBase
                 if (mDownloadUrl == null) {
                     ToastUtil.toastShort(getApplicationContext(), "请选择分辨率!");
                 } else {
-                    CustomMission customMission = new CustomMission(mDownloadUrl, title, portraitUrl);
+                    String url = "http://shouji.360tpcdn.com/170922/9ffde35adefc28d3740d4e16612f078a/com.tencent.tmgp.sgame_22011304.apk";
+                    CustomMission customMission = new CustomMission(url, title, portraitUrl);
                     permissionCheckAndDownload(customMission);
                     dialog.dismiss();
                 }
