@@ -57,7 +57,6 @@ dependencies {
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
-    implementation 'zlc.season:rxdownload3:1.2.6'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.tencent.bugly:crashreport:2.6.6'
     implementation 'com.kyleduo.switchbutton:library:2.0.0'
@@ -68,4 +67,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     //compile 'org.jetbrains:annotations-java5:15.0'
     implementation 'io.supercharge:shimmerlayout:2.0.0'
+    implementation 'com.lzy.net:okgo:3.0.4'
+    implementation 'com.lzy.net:okrx2:2.0.2'
+    implementation 'com.lzy.net:okserver:2.0.5'
 }

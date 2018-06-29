@@ -11,13 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.orhanobut.logger.Logger;
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.adapter.quick.DefinitionListQuickAdapter;
 import com.xu.headlinehelper.base.BaseActivity;
 import com.xu.headlinehelper.bean.VideoAddressBean;
+import com.xu.headlinehelper.bean.VideoDownloadBean;
 import com.xu.headlinehelper.bean.VideoInfoBean;
-import com.xu.headlinehelper.db.dbmanager.CustomMission;
 import com.xu.headlinehelper.util.ImageLoaderUtil;
 import com.xu.headlinehelper.util.ToastUtil;
 
@@ -43,17 +42,17 @@ public abstract class BaseDownloadActivity<T extends IBaseDownloadContract.IBase
     /**
      * 检查权限并且下载
      *
-     * @param customMission 下载地址
-     *                      由于BaseDownloadActivityPermissionsDispatcher 这个类非public，所以在
-     *                      main activity中不能直接调用，因此写成这种形式
+     * @param downloadBean 下载信息类
+     *                     由于BaseDownloadActivityPermissionsDispatcher 这个类非public，所以在
+     *                     main activity中不能直接调用，因此写成这种形式
      */
-    public void permissionCheckAndDownload(CustomMission customMission) {
-        BaseDownloadActivityPermissionsDispatcher.downLoadVideoWithPermissionCheck(this, customMission);
+    public void permissionCheckAndDownload(VideoDownloadBean downloadBean) {
+        BaseDownloadActivityPermissionsDispatcher.downLoadVideoWithPermissionCheck(this, downloadBean);
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    public void downLoadVideo(CustomMission customMission) {
-        mPresenter.downloadVideo(customMission);
+    public void downLoadVideo(VideoDownloadBean downloadBean) {
+        mPresenter.downloadVideo(downloadBean);
     }
 
     @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -131,8 +130,11 @@ public abstract class BaseDownloadActivity<T extends IBaseDownloadContract.IBase
                     ToastUtil.toastShort(getApplicationContext(), "请选择分辨率!");
                 } else {
                     String url = "http://shouji.360tpcdn.com/170922/9ffde35adefc28d3740d4e16612f078a/com.tencent.tmgp.sgame_22011304.apk";
-                    CustomMission customMission = new CustomMission(url, title, portraitUrl);
-                    permissionCheckAndDownload(customMission);
+                    VideoDownloadBean downloadBean = new VideoDownloadBean();
+                    downloadBean.setTitle(title);
+                    downloadBean.setUrl(url);
+                    downloadBean.setPortraitUrl(portraitUrl);
+                    permissionCheckAndDownload(downloadBean);
                     dialog.dismiss();
                 }
 

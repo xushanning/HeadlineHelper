@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import zlc.season.rxdownload3.RxDownload;
 
 /**
  * @author xusn10
@@ -80,10 +79,10 @@ public class MainActivity extends BaseDownloadActivity<IMainContract.IMainPresen
                         startActivity(newTaskIntent);
                         break;
                     case R.id.action_start_all:
-                        RxDownload.INSTANCE.startAll().subscribe();
+
                         break;
                     case R.id.action_suspend_all:
-                        RxDownload.INSTANCE.stopAll().subscribe();
+
                         break;
                     case R.id.action_batch_operation:
 

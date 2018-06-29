@@ -6,7 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.orhanobut.logger.Logger;
+import com.lzy.okserver.OkDownload;
+import com.lzy.okserver.download.DownloadTask;
+import com.lzy.okserver.task.XExecutor;
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.adapter.quick.DownloadingQuickAdapter;
 import com.xu.headlinehelper.base.BaseFragment;
@@ -17,19 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import zlc.season.rxdownload3.core.Mission;
 
 /**
  * @author 言吾許
  *         正在下载fragment
  */
 
-public class DownloadingFragment extends BaseFragment<IDownloadingContract.IDownloadingPresenter> implements IDownloadingContract.IDownloadingView {
+public class DownloadingFragment extends BaseFragment<IDownloadingContract.IDownloadingPresenter> implements IDownloadingContract.IDownloadingView, XExecutor.OnAllTaskEndListener {
     @BindView(R.id.rv_downloading)
     RecyclerView rvDownloading;
     @BindView(R.id.status_view)
     MultipleStatusView statusView;
 
+    private OkDownload okDownload;
 
     private DownloadingQuickAdapter downloadingQuickAdapter;
 
@@ -47,11 +49,12 @@ public class DownloadingFragment extends BaseFragment<IDownloadingContract.IDown
 
     @Override
     public void initOthers() {
+        okDownload = OkDownload.getInstance();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvDownloading.setLayoutManager(layoutManager);
 
-        downloadingQuickAdapter = new DownloadingQuickAdapter(new ArrayList<Mission>());
+        downloadingQuickAdapter = new DownloadingQuickAdapter(new ArrayList<DownloadTask>());
         rvDownloading.setAdapter(downloadingQuickAdapter);
         statusView.showLoading();
         statusView.setOnRetryClickListener(new View.OnClickListener() {
@@ -61,6 +64,7 @@ public class DownloadingFragment extends BaseFragment<IDownloadingContract.IDown
                 startActivity(intent);
             }
         });
+        okDownload.addOnAllTaskEndListener(this);
         refreshDownloadingList();
     }
 
@@ -70,12 +74,12 @@ public class DownloadingFragment extends BaseFragment<IDownloadingContract.IDown
     }
 
     @Override
-    public void loadDownloadingData(List<Mission> missions) {
-        if (missions.size() == 0) {
+    public void loadDownloadingData(List<DownloadTask> tasks) {
+        if (tasks.size() == 0) {
             statusView.showNoData();
         } else {
             statusView.showContent();
-            downloadingQuickAdapter.setNewData(missions);
+            downloadingQuickAdapter.setNewData(tasks);
         }
     }
 
@@ -84,5 +88,16 @@ public class DownloadingFragment extends BaseFragment<IDownloadingContract.IDown
      */
     public void refreshDownloadingList() {
         mPresenter.getCurrentDownloadingTask();
+    }
+
+    @Override
+    public void onAllTaskEnd() {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        okDownload.removeOnAllTaskEndListener(this);
     }
 }

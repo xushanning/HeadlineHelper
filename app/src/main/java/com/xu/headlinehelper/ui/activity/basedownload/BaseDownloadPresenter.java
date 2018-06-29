@@ -1,18 +1,18 @@
 package com.xu.headlinehelper.ui.activity.basedownload;
 
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.request.GetRequest;
+import com.lzy.okserver.OkDownload;
 import com.orhanobut.logger.Logger;
 import com.xu.headlinehelper.base.BasePresenter;
 import com.xu.headlinehelper.bean.VideoAddressBean;
-import com.xu.headlinehelper.db.dbmanager.CustomMission;
+import com.xu.headlinehelper.bean.VideoDownloadBean;
+import com.xu.headlinehelper.net.LogDownloadListener;
 import com.xu.headlinehelper.util.VideoUrlAnalysis;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import java.io.File;
+
 import io.reactivex.functions.Consumer;
-import zlc.season.rxdownload3.RxDownload;
-import zlc.season.rxdownload3.core.Failed;
-import zlc.season.rxdownload3.core.Status;
-import zlc.season.rxdownload3.core.Succeed;
-import zlc.season.rxdownload3.extension.ApkInstallExtension;
 
 /**
  * @author 许 on 2018/6/7.
@@ -41,21 +41,14 @@ public abstract class BaseDownloadPresenter<T extends IBaseDownloadContract.IBas
     }
 
     @Override
-    public void downloadVideo(CustomMission customMission) {
-        RxDownload.INSTANCE.create(customMission, true)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Status>() {
-                    @Override
-                    public void accept(Status status) throws Exception {
-                        Logger.d(status instanceof Failed);
-                        mView.downloading();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Logger.d(throwable.getMessage());
-                    }
-                });
-
+    public void downloadVideo(VideoDownloadBean downloadBean) {
+        GetRequest<File> request = OkGo.get(downloadBean.getUrl());
+        OkDownload.request(downloadBean.getUrl(), request)
+                .extra1(downloadBean)
+                .fileName(downloadBean.getTitle() + ".mp4")
+                .save()
+                //.register(new LogDownloadListener())
+                .start();
+        mView.downloading();
     }
 }

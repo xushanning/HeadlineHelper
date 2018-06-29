@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.lzy.okserver.download.DownloadTask;
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.adapter.quick.HomeListQuickAdapter;
 import com.xu.headlinehelper.base.BaseFragment;
@@ -11,7 +12,6 @@ import com.xu.headlinehelper.base.BaseFragment;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import zlc.season.rxdownload3.core.Mission;
 
 /**
  * @author xu
@@ -38,7 +38,7 @@ public class HomeListFragment extends BaseFragment<IHomeListContract.IHomeListPr
     @Override
     public void initOthers() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        HomeListQuickAdapter quickAdapter = new HomeListQuickAdapter(new ArrayList<Mission>());
+        HomeListQuickAdapter quickAdapter = new HomeListQuickAdapter(new ArrayList<DownloadTask>());
         rvHomeList.setLayoutManager(linearLayoutManager);
         rvHomeList.setAdapter(quickAdapter);
     }

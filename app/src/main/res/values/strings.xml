@@ -49,6 +49,7 @@
     <!--下载任务list界面-->
     <string name="downloading_start">开始</string>
     <string name="downloading_suspend">暂停</string>
+    <string name="downloading_size">%1$s/%2$s</string>
 
     <string name="no_data_new_task">新建下载任务</string>
 
