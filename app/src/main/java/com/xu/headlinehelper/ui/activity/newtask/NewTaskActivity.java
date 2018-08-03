@@ -10,6 +10,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.base.BaseActivity;
 import com.xu.headlinehelper.bean.VideoAddressBean;
+import com.xu.headlinehelper.di.component.ActivityComponent;
 import com.xu.headlinehelper.ui.activity.basedownload.BaseDownloadActivity;
 import com.xu.headlinehelper.util.ToastUtil;
 
@@ -22,7 +23,7 @@ import io.reactivex.functions.Consumer;
  *         新建下载任务的activity
  */
 
-public class NewTaskActivity extends BaseDownloadActivity<INewTaskContract.INewTaskPresenter> implements INewTaskContract.INewTaskView {
+public class NewTaskActivity extends BaseDownloadActivity<INewTaskPresenter> implements INewTaskView {
     @BindView(R.id.et_input)
     EditText etInput;
     @BindView(R.id.tv_download)
@@ -34,8 +35,8 @@ public class NewTaskActivity extends BaseDownloadActivity<INewTaskContract.INewT
     }
 
     @Override
-    public INewTaskContract.INewTaskPresenter setPresenter() {
-        return new NewTaskPresenter();
+    public void inject(ActivityComponent activityComponent) {
+        activityComponent.inject(this);
     }
 
     @Override

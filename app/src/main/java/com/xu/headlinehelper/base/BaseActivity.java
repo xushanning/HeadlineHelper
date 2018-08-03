@@ -6,6 +6,12 @@ import android.support.annotation.Nullable;
 import com.jaeger.library.StatusBarUtil;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xu.headlinehelper.MyApplication;
+import com.xu.headlinehelper.di.component.ActivityComponent;
+import com.xu.headlinehelper.di.component.DaggerActivityComponent;
+import com.xu.headlinehelper.di.module.ActivityModule;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -17,7 +23,9 @@ import io.reactivex.disposables.CompositeDisposable;
  * @author xusn10
  */
 
-public abstract class BaseActivity<T extends IBaseContract.IBasePresenter> extends RxAppCompatActivity implements IBaseContract.IBaseView, IBase {
+public abstract class BaseActivity<T extends IBasePresenter> extends RxAppCompatActivity implements IBaseView {
+
+    @Inject
     protected T mPresenter;
     private Unbinder bind;
     public CompositeDisposable mCompositeDisposable = new CompositeDisposable();
@@ -27,7 +35,15 @@ public abstract class BaseActivity<T extends IBaseContract.IBasePresenter> exten
         super.onCreate(savedInstanceState);
         setContentView(setLayoutId());
         StatusBarUtil.setTranslucentForImageViewInFragment(this, 0, null);
-        mPresenter = setPresenter();
+
+        ActivityComponent activityComponent = DaggerActivityComponent
+                .builder()
+                .applicationComponent(((MyApplication) getApplication()).getApplicationComponent())
+                .activityModule(new ActivityModule())
+                .build();
+
+        inject(activityComponent);
+
         if (mPresenter == null) {
             throw new NullPointerException("presenter 不能为空!");
         }
@@ -38,13 +54,13 @@ public abstract class BaseActivity<T extends IBaseContract.IBasePresenter> exten
         initOthers();
     }
 
-
     /**
-     * 设置presenter
+     * 注入
      *
-     * @return 对应的presenter
+     * @param activityComponent component
      */
-    public abstract T setPresenter();
+    public abstract void inject(ActivityComponent activityComponent);
+
 
     /**
      * 初始化其他

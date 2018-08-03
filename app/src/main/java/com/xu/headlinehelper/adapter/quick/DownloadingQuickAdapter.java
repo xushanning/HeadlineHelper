@@ -1,8 +1,6 @@
 package com.xu.headlinehelper.adapter.quick;
 
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.Formatter;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -31,7 +29,7 @@ public class DownloadingQuickAdapter extends BaseQuickAdapter<DownloadTask, Down
     }
 
     @Override
-    protected void convert(final MyViewHolder helper, final DownloadTask item) {
+    protected void convert(final MyViewHolder helper, DownloadTask item) {
         item.register(new ListDownloadListener(item.progress.tag, helper))
                 .register(new LogDownloadListener());
         helper.setTask(item);

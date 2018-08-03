@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HeadlineHelper.iml" filepath="$PROJECT_DIR$/HeadlineHelper.iml" />
-      <module fileurl="file://D:\Android\AndroidStudioProjects\HeadlineHelper\.idea\HeadlineHelper.iml" filepath="D:\Android\AndroidStudioProjects\HeadlineHelper\.idea\HeadlineHelper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/HeadlineHelper.iml" filepath="$PROJECT_DIR$/.idea/HeadlineHelper.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

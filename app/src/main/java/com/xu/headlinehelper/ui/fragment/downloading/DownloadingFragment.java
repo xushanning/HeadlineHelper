@@ -25,7 +25,7 @@ import butterknife.BindView;
  *         正在下载fragment
  */
 
-public class DownloadingFragment extends BaseFragment<IDownloadingContract.IDownloadingPresenter> implements IDownloadingContract.IDownloadingView, XExecutor.OnAllTaskEndListener {
+public class DownloadingFragment extends BaseFragment< IDownloadingPresenter> implements  IDownloadingView, XExecutor.OnAllTaskEndListener {
     @BindView(R.id.rv_downloading)
     RecyclerView rvDownloading;
     @BindView(R.id.status_view)
@@ -69,7 +69,7 @@ public class DownloadingFragment extends BaseFragment<IDownloadingContract.IDown
     }
 
     @Override
-    public IDownloadingContract.IDownloadingPresenter createPresenter() {
+    public  IDownloadingPresenter createPresenter() {
         return new DownloadingPresenter();
     }
 

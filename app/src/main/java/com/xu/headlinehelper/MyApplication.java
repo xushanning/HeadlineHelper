@@ -12,7 +12,9 @@ import com.xu.headlinehelper.db.dao.DaoMaster;
 import com.xu.headlinehelper.db.dao.DaoSession;
 import com.xu.headlinehelper.db.dao.DownLoadSettingDbBeanDao;
 import com.xu.headlinehelper.db.dbbean.DownLoadSettingDbBean;
-import com.xu.headlinehelper.net.ApiException;
+import com.xu.headlinehelper.di.component.ApplicationComponent;
+import com.xu.headlinehelper.di.component.DaggerApplicationComponent;
+import com.xu.headlinehelper.di.module.ApplicationModule;
 import com.xu.headlinehelper.util.TransformUtil;
 
 import io.reactivex.Observable;
@@ -27,14 +29,23 @@ import io.reactivex.functions.Consumer;
 public class MyApplication extends Application {
     private DaoSession mDaoSession;
     private static MyApplication mInstance;
+    private ApplicationComponent applicationComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        applicationComponent = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this))
+                .build();
+
         mInstance = this;
         initLogger();
         initDatabase();
         initDownload();
+    }
+
+    public ApplicationComponent getApplicationComponent() {
+        return applicationComponent;
     }
 
     private void initLogger() {

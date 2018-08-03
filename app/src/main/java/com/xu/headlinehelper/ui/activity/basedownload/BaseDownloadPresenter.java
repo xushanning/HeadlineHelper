@@ -19,7 +19,7 @@ import io.reactivex.functions.Consumer;
  *         下载视频的基Presenter
  */
 
-public abstract class BaseDownloadPresenter<T extends IBaseDownloadContract.IBaseDownloadView> extends BasePresenter<T> implements IBaseDownloadContract.IBaseDownloadPresenter<T> {
+public abstract class BaseDownloadPresenter<T extends IBaseDownloadView> extends BasePresenter<T> implements IBaseDownloadPresenter<T> {
 
     @Override
     public void getVideoUrl(String shareUrl) {
@@ -28,13 +28,13 @@ public abstract class BaseDownloadPresenter<T extends IBaseDownloadContract.IBas
                 .subscribe(new Consumer<VideoAddressBean.DataBean>() {
                     @Override
                     public void accept(VideoAddressBean.DataBean dataBean) throws Exception {
-                        mView.showDownLoadWindow(dataBean);
+                        getView().showDownLoadWindow(dataBean);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Logger.d(throwable.getMessage());
-                        mView.analysisUrlFailed(throwable.getMessage());
+                        getView().analysisUrlFailed(throwable.getMessage());
                     }
                 });
 
@@ -49,6 +49,6 @@ public abstract class BaseDownloadPresenter<T extends IBaseDownloadContract.IBas
                 .save()
                 //.register(new LogDownloadListener())
                 .start();
-        mView.downloading();
+        getView().downloading();
     }
 }

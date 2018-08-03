@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -20,8 +22,8 @@ import butterknife.Unbinder;
  * @author xu
  */
 
-public abstract class BaseFragment<T extends IBaseContract.IBasePresenter> extends RxFragment implements IBaseContract.IBaseView, IBase {
-
+public abstract class BaseFragment<T extends IBasePresenter> extends RxFragment implements IBaseView {
+    @Inject
     protected T mPresenter;
     private Unbinder bind;
 

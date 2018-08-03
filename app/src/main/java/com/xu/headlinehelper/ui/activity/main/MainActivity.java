@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.adapter.HomeFragmentPagerAdapter;
+import com.xu.headlinehelper.di.component.ActivityComponent;
 import com.xu.headlinehelper.ui.activity.basedownload.BaseDownloadActivity;
 import com.xu.headlinehelper.ui.activity.newtask.NewTaskActivity;
 import com.xu.headlinehelper.ui.activity.settting.SettingActivity;
@@ -30,7 +31,7 @@ import butterknife.BindView;
 /**
  * @author xusn10
  */
-public class MainActivity extends BaseDownloadActivity<IMainContract.IMainPresenter> implements IMainContract.IMainView {
+public class MainActivity extends BaseDownloadActivity<IMainPresenter> implements IMainView {
     @BindView(R.id.dl_main)
     DrawerLayout dlMain;
     @BindView(R.id.nv_drawer)
@@ -153,9 +154,10 @@ public class MainActivity extends BaseDownloadActivity<IMainContract.IMainPresen
     }
 
     @Override
-    public IMainContract.IMainPresenter setPresenter() {
-        return new MainPresenter();
+    public void inject(ActivityComponent activityComponent) {
+        activityComponent.inject(this);
     }
+
 
     @Override
     public void analysisUrlFailed(String msg) {

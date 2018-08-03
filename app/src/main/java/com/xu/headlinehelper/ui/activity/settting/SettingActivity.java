@@ -6,6 +6,7 @@ import android.widget.TextView;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.base.BaseActivity;
+import com.xu.headlinehelper.di.component.ActivityComponent;
 import com.xu.headlinehelper.util.ToastUtil;
 import com.xu.headlinehelper.view.NumberPickerView;
 
@@ -16,7 +17,7 @@ import butterknife.OnClick;
  * @author 言吾許
  */
 
-public class SettingActivity extends BaseActivity<ISettingContract.ISettingPresenter> implements ISettingContract.ISettingView {
+public class SettingActivity extends BaseActivity<ISettingPresenter> implements ISettingView {
 
 
     @BindView(R.id.tv_current_path)
@@ -38,9 +39,10 @@ public class SettingActivity extends BaseActivity<ISettingContract.ISettingPrese
     }
 
     @Override
-    public ISettingContract.ISettingPresenter setPresenter() {
-        return new SettingPresenter();
+    public void inject(ActivityComponent activityComponent) {
+        activityComponent.inject(this);
     }
+
 
     @Override
     public void initOthers() {

@@ -36,7 +36,7 @@ import permissions.dispatcher.RuntimePermissions;
  *         封装权限控制
  */
 @RuntimePermissions
-public abstract class BaseDownloadActivity<T extends IBaseDownloadContract.IBaseDownloadPresenter> extends BaseActivity<T> implements IBaseDownloadContract.IBaseDownloadView {
+public abstract class BaseDownloadActivity<T extends IBaseDownloadPresenter> extends BaseActivity<T> implements IBaseDownloadView {
     private String mDownloadUrl;
 
     /**

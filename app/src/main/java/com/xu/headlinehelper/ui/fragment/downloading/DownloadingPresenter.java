@@ -12,7 +12,7 @@ import java.util.List;
  * @author 言吾許
  */
 
-public class DownloadingPresenter extends BasePresenter<IDownloadingContract.IDownloadingView> implements IDownloadingContract.IDownloadingPresenter {
+public class DownloadingPresenter extends BasePresenter< IDownloadingView> implements  IDownloadingPresenter {
 
     @Override
     public void getCurrentDownloadingTask() {
@@ -20,6 +20,6 @@ public class DownloadingPresenter extends BasePresenter<IDownloadingContract.IDo
         if (tasks != null && tasks.size() != 0) {
             Logger.d(tasks.get(0).progress.fileName);
         }
-        mView.loadDownloadingData(tasks);
+        getView().loadDownloadingData(tasks);
     }
 }

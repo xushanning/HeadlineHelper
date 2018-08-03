@@ -17,7 +17,7 @@ import butterknife.BindView;
  * @author xu
  */
 
-public class HomeListFragment extends BaseFragment<IHomeListContract.IHomeListPresenter> implements IHomeListContract.IHomeListView {
+public class HomeListFragment extends BaseFragment<IHomeListPresenter> implements IHomeListView {
 
     @BindView(R.id.rv_home_list)
     RecyclerView rvHomeList;
@@ -44,7 +44,7 @@ public class HomeListFragment extends BaseFragment<IHomeListContract.IHomeListPr
     }
 
     @Override
-    public IHomeListContract.IHomeListPresenter createPresenter() {
+    public IHomeListPresenter createPresenter() {
         return new HomeListPresenter();
     }
 
