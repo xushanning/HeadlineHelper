@@ -8,7 +8,7 @@ public class HttpConstants {
     /**
      * baseUrl
      */
-    static final String BASE_URL = "http://www.toutiao.com/api/";
+    public static final String BASE_URL = "http://www.toutiao.com/api/";
     /**
      * 视频的头地址
      */

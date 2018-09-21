@@ -1,6 +1,7 @@
 package com.xu.headlinehelper.base;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,67 +10,54 @@ import android.view.ViewGroup;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by xusn10 on 2018/1/15.
- * 懒加载
- * http://www.cnblogs.com/dasusu/p/6745032.html
- *
- * @author xu
+ * @author 言吾許
+ * 无mvp fragment
  */
-
-public abstract class BaseFragment<T extends IBasePresenter> extends RxFragment implements IBaseView {
-    @Inject
-    protected T mPresenter;
+public abstract class BaseFragment extends RxFragment implements IFragment, IView {
     private Unbinder bind;
-
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mView = inflater.inflate(setLayoutId(), container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View mView = inflater.inflate(setLayout(), container, false);
         bind = ButterKnife.bind(this, mView);
-
-        mPresenter = createPresenter();
-        if (mPresenter == null) {
-            throw new NullPointerException("presenter 不能为空!");
-        }
-        mPresenter.attachView(this);
-        initOthers();
+        initData(savedInstanceState);
+        initMvp();
         return mView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void initMvp() {
+
     }
 
+    @Override
+    public void showDialog() {
 
-    /**
-     * 初始化其他
-     */
-    public abstract void initOthers();
+    }
 
-    /**
-     * 设置presenter
-     *
-     * @return 对应的presenter
-     */
-    public abstract T createPresenter();
+    @Override
+    public void hideDialog() {
 
+    }
+
+    @Override
+    public void showMessage(@NonNull String message) {
+
+    }
+
+    @Override
+    public void finish() {
+
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mPresenter != null) {
-            mPresenter.detachView();
-        }
         bind.unbind();
-
     }
 
     @Override

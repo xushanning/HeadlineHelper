@@ -1,8 +1,7 @@
 package com.xu.headlinehelper.base;
 
-import com.xu.headlinehelper.net.ApiException;
-
-import javax.inject.Inject;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by xusn10 on 2018/1/16.
@@ -10,28 +9,32 @@ import javax.inject.Inject;
  * @author xusn10
  */
 
-public class BasePresenter<T extends  IBaseView> implements  IBasePresenter<T> {
-    private T mView;
+public class BasePresenter<V extends IView> implements IPresenter<V> {
+    private V mView;
+    private CompositeDisposable mCompositeDisposable;
+
+    public BasePresenter(CompositeDisposable mCompositeDisposable) {
+        this.mCompositeDisposable = mCompositeDisposable;
+    }
+
+    public void addDispose(Disposable disposable) {
+        mCompositeDisposable.add(disposable);
+    }
+
+    public V getView() {
+        return mView;
+    }
+
 
     @Override
-    public void attachView(T view) {
+    public void attachView(V view) {
         this.mView = view;
     }
 
     @Override
     public void detachView() {
-        if (mView != null) {
-            mView = null;
-        }
+        this.mView = null;
+        mCompositeDisposable.clear();
+        mCompositeDisposable = null;
     }
-
-    public T getView() {
-        return mView;
-    }
-
-    @Override
-    public void handleApiException(ApiException apiException) {
-
-    }
-
 }

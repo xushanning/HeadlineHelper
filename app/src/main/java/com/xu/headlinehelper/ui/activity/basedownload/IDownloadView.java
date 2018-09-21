@@ -1,13 +1,13 @@
 package com.xu.headlinehelper.ui.activity.basedownload;
 
-import com.xu.headlinehelper.base.IBaseView;
+import com.xu.headlinehelper.base.IView;
 import com.xu.headlinehelper.bean.VideoAddressBean;
 
 /**
  * @author 言吾許
  */
 
-public interface IBaseDownloadView extends IBaseView {
+public interface IDownloadView extends IView {
     /**
      * 显示下载窗口
      *

@@ -5,9 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.xu.headlinehelper.ui.fragment.downloading.DownloadingFragment;
-import com.xu.headlinehelper.ui.fragment.homelist.HomeListFragment;
-
 import java.util.List;
 
 /**

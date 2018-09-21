@@ -39,15 +39,12 @@ public class DefinitionListQuickAdapter extends BaseQuickAdapter<VideoInfoBean, 
         radioCheckables.put(helper.getLayoutPosition(), radioCheckable);
         radioButtons.append(helper.getLayoutPosition(), rbDefinition);
         rbDefinition.setText(mContext.getString(R.string.new_task_definition_item, item.getDefinition(), transferBitToMb(item.getSize())));
-        rbDefinition.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setOtherRadioButtonUnchecked(helper.getLayoutPosition());
-                boolean isChecked = radioCheckables.get(helper.getLayoutPosition()).isChecked();
-                radioCheckables.get(helper.getLayoutPosition()).setChecked(!isChecked);
-                rbDefinition.setChecked(!isChecked);
-                onRadioButtonSelectListener.onRadioButtonChange(getData().get(helper.getLayoutPosition()).getMain_url());
-            }
+        rbDefinition.setOnClickListener(v -> {
+            setOtherRadioButtonUnchecked(helper.getLayoutPosition());
+            boolean isChecked = radioCheckables.get(helper.getLayoutPosition()).isChecked();
+            radioCheckables.get(helper.getLayoutPosition()).setChecked(!isChecked);
+            rbDefinition.setChecked(!isChecked);
+            onRadioButtonSelectListener.onRadioButtonChange(getData().get(helper.getLayoutPosition()).getMain_url());
         });
     }
 

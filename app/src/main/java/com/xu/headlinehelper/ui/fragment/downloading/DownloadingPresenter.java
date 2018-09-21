@@ -8,18 +8,26 @@ import com.xu.headlinehelper.base.BasePresenter;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import io.reactivex.disposables.CompositeDisposable;
+
 /**
  * @author 言吾許
  */
 
-public class DownloadingPresenter extends BasePresenter< IDownloadingView> implements  IDownloadingPresenter {
+public class DownloadingPresenter extends BasePresenter<IDownloadingView> implements IDownloadingPresenter {
+    @Inject
+    public DownloadingPresenter(CompositeDisposable mCompositeDisposable) {
+        super(mCompositeDisposable);
+    }
 
     @Override
     public void getCurrentDownloadingTask() {
         List<DownloadTask> tasks = OkDownload.restore(DownloadManager.getInstance().getDownloading());
         if (tasks != null && tasks.size() != 0) {
             Logger.d(tasks.get(0).progress.fileName);
+            getView().loadDownloadingData(tasks);
         }
-        getView().loadDownloadingData(tasks);
     }
 }

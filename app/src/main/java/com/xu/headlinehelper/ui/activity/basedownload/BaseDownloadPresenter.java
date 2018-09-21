@@ -7,36 +7,34 @@ import com.orhanobut.logger.Logger;
 import com.xu.headlinehelper.base.BasePresenter;
 import com.xu.headlinehelper.bean.VideoAddressBean;
 import com.xu.headlinehelper.bean.VideoDownloadBean;
-import com.xu.headlinehelper.net.LogDownloadListener;
 import com.xu.headlinehelper.util.VideoUrlAnalysis;
 
 import java.io.File;
 
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 
 /**
  * @author 许 on 2018/6/7.
- *         下载视频的基Presenter
+ * 下载视频的基Presenter
  */
 
-public abstract class BaseDownloadPresenter<T extends IBaseDownloadView> extends BasePresenter<T> implements IBaseDownloadPresenter<T> {
+public abstract class BaseDownloadPresenter<T extends IDownloadView> extends BasePresenter<T> implements IDownloadPresenter<T> {
+
+    public BaseDownloadPresenter(CompositeDisposable mCompositeDisposable) {
+        super(mCompositeDisposable);
+    }
 
     @Override
     public void getVideoUrl(String shareUrl) {
         Logger.d(shareUrl);
-        new VideoUrlAnalysis().getDownloadObservable(shareUrl)
-                .subscribe(new Consumer<VideoAddressBean.DataBean>() {
-                    @Override
-                    public void accept(VideoAddressBean.DataBean dataBean) throws Exception {
-                        getView().showDownLoadWindow(dataBean);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Logger.d(throwable.getMessage());
-                        getView().analysisUrlFailed(throwable.getMessage());
-                    }
-                });
+        new VideoUrlAnalysis()
+                .getDownloadObservable(shareUrl)
+                .subscribe(dataBean -> getView().showDownLoadWindow(dataBean),
+                        throwable -> {
+                            Logger.d(throwable.getMessage());
+                            getView().analysisUrlFailed(throwable.getMessage());
+                        });
 
     }
 

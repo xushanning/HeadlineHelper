@@ -21,4 +21,11 @@ public class ApplicationModule {
     public Context provideContext() {
         return application;
     }
+
+    @Provides
+    public Application provideApplication() {
+        return application;
+    }
+
+
 }

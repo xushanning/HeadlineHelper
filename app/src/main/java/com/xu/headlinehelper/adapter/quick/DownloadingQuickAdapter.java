@@ -48,12 +48,7 @@ public class DownloadingQuickAdapter extends BaseQuickAdapter<DownloadTask, Down
             progressBar = getView(R.id.progressBar);
             progressBar.setMax(10000);
             textView = getView(R.id.tv_start);
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    refreshProgress(task.progress);
-                }
-            });
+            textView.setOnClickListener(v -> refreshProgress(task.progress));
         }
 
         void setTask(DownloadTask task) {

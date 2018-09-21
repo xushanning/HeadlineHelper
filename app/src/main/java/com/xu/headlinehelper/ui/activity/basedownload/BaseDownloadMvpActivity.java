@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.adapter.quick.DefinitionListQuickAdapter;
-import com.xu.headlinehelper.base.BaseActivity;
+import com.xu.headlinehelper.base.BaseMvpActivity;
 import com.xu.headlinehelper.bean.VideoAddressBean;
 import com.xu.headlinehelper.bean.VideoDownloadBean;
 import com.xu.headlinehelper.bean.VideoInfoBean;
@@ -32,11 +32,11 @@ import permissions.dispatcher.RuntimePermissions;
 
 /**
  * @author 许 on 2018/6/7.
- *         下载的基础类  主activity和newtask  activity都要继承自此类
- *         封装权限控制
+ * 下载的基础类  主activity和newtask  activity都要继承自此类
+ * 封装权限控制
  */
 @RuntimePermissions
-public abstract class BaseDownloadActivity<T extends IBaseDownloadPresenter> extends BaseActivity<T> implements IBaseDownloadView {
+public abstract class BaseDownloadMvpActivity<T extends IDownloadPresenter> extends BaseMvpActivity<T> implements IDownloadView {
     private String mDownloadUrl;
 
     /**
@@ -47,7 +47,7 @@ public abstract class BaseDownloadActivity<T extends IBaseDownloadPresenter> ext
      *                     main activity中不能直接调用，因此写成这种形式
      */
     public void permissionCheckAndDownload(VideoDownloadBean downloadBean) {
-        BaseDownloadActivityPermissionsDispatcher.downLoadVideoWithPermissionCheck(this, downloadBean);
+        BaseDownloadMvpActivityPermissionsDispatcher.downLoadVideoWithPermissionCheck(this, downloadBean);
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -60,18 +60,9 @@ public abstract class BaseDownloadActivity<T extends IBaseDownloadPresenter> ext
         new AlertDialog.Builder(this)
                 .setCancelable(false)
                 .setMessage(R.string.permission_write_external_storage)
-                .setPositiveButton(R.string.button_allow, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        request.proceed();
-                    }
-                })
-                .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        request.cancel();
-                    }
-                }).show();
+                .setPositiveButton(R.string.button_allow, (dialogInterface, i) -> request.proceed())
+                .setNegativeButton(R.string.button_cancel, (dialogInterface, i) -> request.cancel())
+                .show();
     }
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -87,7 +78,7 @@ public abstract class BaseDownloadActivity<T extends IBaseDownloadPresenter> ext
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        BaseDownloadActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+        BaseDownloadMvpActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     @Override
@@ -107,38 +98,25 @@ public abstract class BaseDownloadActivity<T extends IBaseDownloadPresenter> ext
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvDefinition.setLayoutManager(linearLayoutManager);
         rvDefinition.setAdapter(quickAdapter);
-        quickAdapter.setOnRadioButtonChangeListener(new DefinitionListQuickAdapter.OnRadioButtonSelectListener() {
-            @Override
-            public void onRadioButtonChange(String downloadUrl) {
-                mDownloadUrl = downloadUrl;
-            }
-        });
+        quickAdapter.setOnRadioButtonChangeListener(downloadUrl -> mDownloadUrl = downloadUrl);
         final String title = dataBean.getUser_id();
         final String portraitUrl = dataBean.getPoster_url();
         tvTitle.setText(title);
         ImageLoaderUtil.loadImage(this, portraitUrl, imgThumbnail);
-        imgClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        imgClose.setOnClickListener(v -> dialog.dismiss());
+        tvDownload.setOnClickListener(v -> {
+            if (mDownloadUrl == null) {
+                ToastUtil.toastShort(getApplicationContext(), "请选择分辨率!");
+            } else {
+                String url = "http://shouji.360tpcdn.com/170922/9ffde35adefc28d3740d4e16612f078a/com.tencent.tmgp.sgame_22011304.apk";
+                VideoDownloadBean downloadBean = new VideoDownloadBean();
+                downloadBean.setTitle(title);
+                downloadBean.setUrl(url);
+                downloadBean.setPortraitUrl(portraitUrl);
+                permissionCheckAndDownload(downloadBean);
                 dialog.dismiss();
             }
-        });
-        tvDownload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mDownloadUrl == null) {
-                    ToastUtil.toastShort(getApplicationContext(), "请选择分辨率!");
-                } else {
-                    String url = "http://shouji.360tpcdn.com/170922/9ffde35adefc28d3740d4e16612f078a/com.tencent.tmgp.sgame_22011304.apk";
-                    VideoDownloadBean downloadBean = new VideoDownloadBean();
-                    downloadBean.setTitle(title);
-                    downloadBean.setUrl(url);
-                    downloadBean.setPortraitUrl(portraitUrl);
-                    permissionCheckAndDownload(downloadBean);
-                    dialog.dismiss();
-                }
 
-            }
         });
 
     }

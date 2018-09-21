@@ -1,11 +1,13 @@
 package com.xu.headlinehelper.ui.activity.settting;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.kyleduo.switchbutton.SwitchButton;
 import com.xu.headlinehelper.R;
-import com.xu.headlinehelper.base.BaseActivity;
+import com.xu.headlinehelper.base.BaseMvpActivity;
 import com.xu.headlinehelper.di.component.ActivityComponent;
 import com.xu.headlinehelper.util.ToastUtil;
 import com.xu.headlinehelper.view.NumberPickerView;
@@ -17,7 +19,7 @@ import butterknife.OnClick;
  * @author 言吾許
  */
 
-public class SettingActivity extends BaseActivity<ISettingPresenter> implements ISettingView {
+public class SettingActivity extends BaseMvpActivity<ISettingPresenter> implements ISettingView {
 
 
     @BindView(R.id.tv_current_path)
@@ -33,39 +35,30 @@ public class SettingActivity extends BaseActivity<ISettingPresenter> implements 
     @BindView(R.id.np_retry_count)
     NumberPickerView npRetryCount;
 
+
     @Override
-    public int setLayoutId() {
+    public int setLayout() {
         return R.layout.activity_setting;
+    }
+
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
+        sbShock.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+        });
+
+        sbNotify.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+        });
+
+        sbWifi.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+        });
     }
 
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
-    }
-
-
-    @Override
-    public void initOthers() {
-        sbShock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-            }
-        });
-
-        sbNotify.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-            }
-        });
-
-        sbWifi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-            }
-        });
     }
 
 
@@ -84,4 +77,5 @@ public class SettingActivity extends BaseActivity<ISettingPresenter> implements 
             ToastUtil.toastShort(this, "设置失败!");
         }
     }
+
 }

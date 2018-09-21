@@ -1,16 +1,22 @@
 package com.xu.headlinehelper.di.component;
 
 import com.xu.headlinehelper.di.module.ActivityModule;
+import com.xu.headlinehelper.di.scope.PerActivity;
 import com.xu.headlinehelper.ui.activity.main.MainActivity;
 import com.xu.headlinehelper.ui.activity.newtask.NewTaskActivity;
 import com.xu.headlinehelper.ui.activity.settting.SettingActivity;
+import com.xu.headlinehelper.ui.fragment.downloading.DownloadingFragment;
+import com.xu.headlinehelper.ui.fragment.homelist.HomeListFragment;
+
+import javax.inject.Singleton;
 
 import dagger.Component;
 
 /**
  * @author 言吾許
  */
-@Component(modules = {ActivityModule.class}, dependencies = ApplicationComponent.class)
+@PerActivity
+@Component(modules = {ActivityModule.class}, dependencies = AppComponent.class)
 public interface ActivityComponent {
     /**
      * 注入到main中
@@ -32,4 +38,18 @@ public interface ActivityComponent {
      * @param settingActivity 目标activity
      */
     void inject(SettingActivity settingActivity);
+
+    /**
+     * 注入到下载fragment中去
+     *
+     * @param downloadingFragment 目标fragment
+     */
+    void inject(DownloadingFragment downloadingFragment);
+
+    /**
+     * 注入到首页列表中去
+     *
+     * @param homeListFragment 目标fragment
+     */
+    void inject(HomeListFragment homeListFragment);
 }

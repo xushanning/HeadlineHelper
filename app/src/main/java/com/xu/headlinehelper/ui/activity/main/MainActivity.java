@@ -1,7 +1,9 @@
 package com.xu.headlinehelper.ui.activity.main;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -15,7 +17,7 @@ import android.view.MenuItem;
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.adapter.HomeFragmentPagerAdapter;
 import com.xu.headlinehelper.di.component.ActivityComponent;
-import com.xu.headlinehelper.ui.activity.basedownload.BaseDownloadActivity;
+import com.xu.headlinehelper.ui.activity.basedownload.BaseDownloadMvpActivity;
 import com.xu.headlinehelper.ui.activity.newtask.NewTaskActivity;
 import com.xu.headlinehelper.ui.activity.settting.SettingActivity;
 import com.xu.headlinehelper.ui.fragment.downloading.DownloadingFragment;
@@ -31,7 +33,7 @@ import butterknife.BindView;
 /**
  * @author xusn10
  */
-public class MainActivity extends BaseDownloadActivity<IMainPresenter> implements IMainView {
+public class MainActivity extends BaseDownloadMvpActivity<IMainPresenter> implements IMainView {
     @BindView(R.id.dl_main)
     DrawerLayout dlMain;
     @BindView(R.id.nv_drawer)
@@ -46,12 +48,12 @@ public class MainActivity extends BaseDownloadActivity<IMainPresenter> implement
     private DownloadingFragment downloadingFragment;
 
     @Override
-    public int setLayoutId() {
+    public int setLayout() {
         return R.layout.activity_main;
     }
 
     @Override
-    public void initOthers() {
+    public void initData(@Nullable Bundle savedInstanceState) {
         String shareUrl = "http://m.toutiaoimg.cn/group/6563953907100290317/?iid=0&app=news_article&timestamp=1528355726&tt_from=mobile_qq&utm_source=mobile_qq&utm_medium=toutiao_ios&utm_campaign=client_share";
         // String shareUrl = "http://m.toutiaoimg.cn/a6454038434225848845/?iid=33715723214&app=news_article&tt_from=mobile_qq&utm_source=mobile_qq&utm_medium=toutiao_ios&utm_campaign=client_share";
         mPresenter.getVideoUrl(shareUrl);
@@ -70,33 +72,30 @@ public class MainActivity extends BaseDownloadActivity<IMainPresenter> implement
     private void initToolBar() {
         setSupportActionBar(tbMain);
         getSupportActionBar().setTitle(getString(R.string.app_name));
-        tbMain.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int menuID = item.getItemId();
-                switch (menuID) {
-                    case R.id.action_new_task:
-                        Intent newTaskIntent = new Intent(MainActivity.this, NewTaskActivity.class);
-                        startActivity(newTaskIntent);
-                        break;
-                    case R.id.action_start_all:
+        tbMain.setOnMenuItemClickListener(item -> {
+            int menuID = item.getItemId();
+            switch (menuID) {
+                case R.id.action_new_task:
+                    Intent newTaskIntent = new Intent(MainActivity.this, NewTaskActivity.class);
+                    startActivity(newTaskIntent);
+                    break;
+                case R.id.action_start_all:
 
-                        break;
-                    case R.id.action_suspend_all:
+                    break;
+                case R.id.action_suspend_all:
 
-                        break;
-                    case R.id.action_batch_operation:
+                    break;
+                case R.id.action_batch_operation:
 
-                        break;
-                    case R.id.action_setting:
-                        Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
-                        startActivity(settingIntent);
-                        break;
-                    default:
-                        break;
-                }
-                return true;
+                    break;
+                case R.id.action_setting:
+                    Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
+                    startActivity(settingIntent);
+                    break;
+                default:
+                    break;
             }
+            return true;
         });
 
     }

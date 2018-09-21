@@ -2,6 +2,7 @@ package com.xu.headlinehelper.ui.fragment.downloading;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,7 +12,8 @@ import com.lzy.okserver.download.DownloadTask;
 import com.lzy.okserver.task.XExecutor;
 import com.xu.headlinehelper.R;
 import com.xu.headlinehelper.adapter.quick.DownloadingQuickAdapter;
-import com.xu.headlinehelper.base.BaseFragment;
+import com.xu.headlinehelper.base.BaseMvpFragment;
+import com.xu.headlinehelper.di.component.ActivityComponent;
 import com.xu.headlinehelper.ui.activity.newtask.NewTaskActivity;
 import com.xu.headlinehelper.view.MultipleStatusView;
 
@@ -22,10 +24,10 @@ import butterknife.BindView;
 
 /**
  * @author 言吾許
- *         正在下载fragment
+ * 正在下载fragment
  */
 
-public class DownloadingFragment extends BaseFragment< IDownloadingPresenter> implements  IDownloadingView, XExecutor.OnAllTaskEndListener {
+public class DownloadingFragment extends BaseMvpFragment<IDownloadingPresenter> implements IDownloadingView, XExecutor.OnAllTaskEndListener {
     @BindView(R.id.rv_downloading)
     RecyclerView rvDownloading;
     @BindView(R.id.status_view)
@@ -43,35 +45,33 @@ public class DownloadingFragment extends BaseFragment< IDownloadingPresenter> im
     }
 
     @Override
-    public int setLayoutId() {
+    public int setLayout() {
         return R.layout.fragment_downloading;
     }
 
     @Override
-    public void initOthers() {
+    public void inject(ActivityComponent activityComponent) {
+        activityComponent.inject(this);
+    }
+
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
         okDownload = OkDownload.getInstance();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvDownloading.setLayoutManager(layoutManager);
 
-        downloadingQuickAdapter = new DownloadingQuickAdapter(new ArrayList<DownloadTask>());
+        downloadingQuickAdapter = new DownloadingQuickAdapter(new ArrayList<>());
         rvDownloading.setAdapter(downloadingQuickAdapter);
         statusView.showLoading();
-        statusView.setOnRetryClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), NewTaskActivity.class);
-                startActivity(intent);
-            }
+        statusView.setOnRetryClickListener(v -> {
+            Intent intent = new Intent(getActivity(), NewTaskActivity.class);
+            startActivity(intent);
         });
         okDownload.addOnAllTaskEndListener(this);
         refreshDownloadingList();
     }
 
-    @Override
-    public  IDownloadingPresenter createPresenter() {
-        return new DownloadingPresenter();
-    }
 
     @Override
     public void loadDownloadingData(List<DownloadTask> tasks) {
@@ -100,4 +100,5 @@ public class DownloadingFragment extends BaseFragment< IDownloadingPresenter> im
         super.onDestroy();
         okDownload.removeOnAllTaskEndListener(this);
     }
+
 }
