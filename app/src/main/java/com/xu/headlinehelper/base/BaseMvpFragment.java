@@ -31,7 +31,7 @@ public abstract class BaseMvpFragment<T extends IPresenter> extends BaseFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ActivityComponent activityComponent = DaggerActivityComponent
                 .builder()
-                .appComponent(MyApplication.getInstance().getAppComponent())
+                .appComponent(MyApplication.getAppComponent())
                 .activityModule(new ActivityModule())
                 .build();
         inject(activityComponent);

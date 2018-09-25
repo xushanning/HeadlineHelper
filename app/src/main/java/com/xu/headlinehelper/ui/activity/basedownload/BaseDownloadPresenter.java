@@ -11,6 +11,8 @@ import com.xu.headlinehelper.util.VideoUrlAnalysis;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 
@@ -20,6 +22,8 @@ import io.reactivex.functions.Consumer;
  */
 
 public abstract class BaseDownloadPresenter<T extends IDownloadView> extends BasePresenter<T> implements IDownloadPresenter<T> {
+    @Inject
+    VideoUrlAnalysis videoUrlAnalysis;
 
     public BaseDownloadPresenter(CompositeDisposable mCompositeDisposable) {
         super(mCompositeDisposable);
@@ -28,7 +32,7 @@ public abstract class BaseDownloadPresenter<T extends IDownloadView> extends Bas
     @Override
     public void getVideoUrl(String shareUrl) {
         Logger.d(shareUrl);
-        new VideoUrlAnalysis()
+        videoUrlAnalysis
                 .getDownloadObservable(shareUrl)
                 .subscribe(dataBean -> getView().showDownLoadWindow(dataBean),
                         throwable -> {

@@ -3,6 +3,8 @@ package com.xu.headlinehelper.di.module;
 import android.app.Application;
 import android.content.Context;
 
+import com.google.gson.Gson;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -11,21 +13,14 @@ import dagger.Provides;
  */
 @Module
 public class ApplicationModule {
-    private Application application;
-
-    public ApplicationModule(Application application) {
-        this.application = application;
-    }
 
     @Provides
-    public Context provideContext() {
+    public Context provideContext(Application application) {
         return application;
     }
 
     @Provides
-    public Application provideApplication() {
-        return application;
+    public Gson provideGson() {
+        return new Gson();
     }
-
-
 }

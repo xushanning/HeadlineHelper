@@ -38,12 +38,12 @@ public class ClientModule {
 
     @Singleton
     @Provides
-    public VideoApi provideVideoApi(OkHttpClient okHttpClient) {
+    public VideoApi provideVideoApi(OkHttpClient okHttpClient, Gson gson) {
         return new Retrofit
                 .Builder()
                 .baseUrl(HttpConstants.BASE_URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(new Gson()))
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
                 .build()
@@ -58,7 +58,7 @@ public class ClientModule {
                 .readTimeout(TIME_OUT, TimeUnit.SECONDS);
         //    .cache(cache)
         builder.addInterceptor(chain -> {
-            final Request request = chain.request();
+            Request request = chain.request();
             //请求地址
             Logger.d("请求地址:" + request.url());
             return chain.proceed(request);
@@ -83,7 +83,7 @@ public class ClientModule {
     }
 
     /**
-     * 提供daosession
+     * 为多个dao提供daosession
      *
      * @param application 上下文
      * @return daoSession

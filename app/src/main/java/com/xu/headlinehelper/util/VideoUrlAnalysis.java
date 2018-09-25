@@ -2,19 +2,19 @@ package com.xu.headlinehelper.util;
 
 import android.util.Base64;
 
-import com.orhanobut.logger.Logger;
 import com.xu.headlinehelper.bean.VideoAddressBean;
 import com.xu.headlinehelper.net.ApiException;
 import com.xu.headlinehelper.net.HttpConstants;
-import com.xu.headlinehelper.net.RetrofitFactory;
+import com.xu.headlinehelper.net.VideoApi;
 
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.CRC32;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
@@ -25,6 +25,8 @@ import io.reactivex.functions.Function;
  */
 
 public class VideoUrlAnalysis {
+    @Inject
+    VideoApi videoApi;
     /**
      * 视频网页的正则
      */
@@ -58,6 +60,10 @@ public class VideoUrlAnalysis {
      */
     private String videoTitle = "未知";
 
+    @Inject
+    public VideoUrlAnalysis() {
+    }
+
     /**
      * 获取视频真实地址
      *
@@ -88,7 +94,7 @@ public class VideoUrlAnalysis {
                         throw new ApiException("不是抖音或者西瓜视频链接！");
                     }
                 })
-                .flatMap((Function<String, ObservableSource<String>>) s -> RetrofitFactory.getVideoApi().getVideoHtml(s))
+                .flatMap((Function<String, ObservableSource<String>>) s -> videoApi.getVideoHtml(s))
                 .flatMap((Function<String, ObservableSource<VideoAddressBean>>) s -> {
                     Matcher videoPatcher = videoPattern.matcher(s);
                     Matcher titlePatcher = titlePattern.matcher(s);
@@ -111,7 +117,7 @@ public class VideoUrlAnalysis {
                         //2.访问http://i.snssdk.com/video/urls/v/1/toutiao/mp4/{videoid}?r={Math.random()}&s={crc32值}
                         String crcString = String.valueOf(crc32.getValue());
                         String videoAddressUrl = HttpConstants.VIDEO_URL + format + "&s=" + crcString;
-                        return RetrofitFactory.getVideoApi().getVideoAddress(videoAddressUrl);
+                        return videoApi.getVideoAddress(videoAddressUrl);
                     } else {
                         throw new ApiException("解析错误!");
                     }

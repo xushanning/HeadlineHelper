@@ -7,15 +7,18 @@ import com.coorchice.library.ImageEngine;
 import com.lzy.okgo.OkGo;
 import com.lzy.okserver.OkDownload;
 import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
-import com.xu.headlinehelper.db.dao.DaoSession;
+import com.orhanobut.logger.PrettyFormatStrategy;
 import com.xu.headlinehelper.db.dao.DownLoadSettingDbBeanDao;
 import com.xu.headlinehelper.db.dbbean.DownLoadSettingDbBean;
 import com.xu.headlinehelper.di.component.AppComponent;
+
 import com.xu.headlinehelper.di.component.DaggerAppComponent;
 import com.xu.headlinehelper.di.module.ApplicationModule;
 import com.xu.headlinehelper.di.module.ClientModule;
 import com.xu.headlinehelper.util.GlideEngine;
+import com.xu.headlinehelper.util.LoggerStrategy;
 import com.xu.headlinehelper.util.TransformUtil;
 
 import javax.inject.Inject;
@@ -30,43 +33,50 @@ import io.reactivex.disposables.Disposable;
 
 public class MyApplication extends Application {
     @Inject
-    DaoSession mDaoSession;
-    private static MyApplication mInstance;
-    private AppComponent appComponent;
+    DownLoadSettingDbBeanDao settingDbBeanDao;
+    private static AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
         appComponent = DaggerAppComponent.builder()
-                .applicationModule(new ApplicationModule(this))
+                .application(this)
+                .appModule(new ApplicationModule())
                 .clientModule(new ClientModule())
                 .build();
         appComponent.inject(this);
-        mInstance = this;
+
         ImageEngine.install(new GlideEngine(this));
         initLogger();
         initDownload();
     }
 
-    public AppComponent getAppComponent() {
+    public static AppComponent getAppComponent() {
         return appComponent;
     }
 
     private void initLogger() {
-        if (BuildConfig.DEBUG) {
-            Logger.addLogAdapter(new AndroidLogAdapter());
-        }
+        FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
+                .showThreadInfo(false)
+                .methodCount(3)
+                .methodOffset(5)
+                .logStrategy(new LoggerStrategy())
+                .tag("headline")
+                .build();
+
+        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy) {
+            @Override
+            public boolean isLoggable(int priority, String tag) {
+                return BuildConfig.DEBUG;
+            }
+        });
     }
 
-    public static MyApplication getInstance() {
-        return mInstance;
-    }
 
     private void initDownload() {
         Disposable downloadDis = Observable
                 .create((ObservableOnSubscribe<DownLoadSettingDbBean>) e -> {
-                    DownLoadSettingDbBeanDao dbBeanDao = mDaoSession.getDownLoadSettingDbBeanDao();
-                    DownLoadSettingDbBean dbBean = dbBeanDao.queryBuilder().unique();
+                    DownLoadSettingDbBean dbBean = settingDbBeanDao.queryBuilder().unique();
                     if (dbBean != null) {
                         e.onNext(dbBean);
                     } else {
@@ -85,7 +95,7 @@ public class MyApplication extends Application {
                         //默认存储路径
                         String path = Environment.getExternalStorageDirectory().getPath() + "/头条助手/";
                         newDbBean.setSavePath(path);
-                        dbBeanDao.insert(newDbBean);
+                        settingDbBeanDao.insert(newDbBean);
                         e.onNext(newDbBean);
                     }
                     e.onComplete();

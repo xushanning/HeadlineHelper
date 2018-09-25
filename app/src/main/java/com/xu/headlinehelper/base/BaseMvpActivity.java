@@ -26,7 +26,7 @@ public abstract class BaseMvpActivity<T extends IPresenter> extends BaseActivity
         super.onCreate(savedInstanceState);
         ActivityComponent activityComponent = DaggerActivityComponent
                 .builder()
-                .appComponent(((MyApplication) getApplication()).getAppComponent())
+                .appComponent(MyApplication.getAppComponent())
                 .activityModule(new ActivityModule())
                 .build();
         inject(activityComponent);

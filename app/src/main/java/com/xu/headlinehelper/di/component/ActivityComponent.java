@@ -8,8 +8,6 @@ import com.xu.headlinehelper.ui.activity.settting.SettingActivity;
 import com.xu.headlinehelper.ui.fragment.downloading.DownloadingFragment;
 import com.xu.headlinehelper.ui.fragment.homelist.HomeListFragment;
 
-import javax.inject.Singleton;
-
 import dagger.Component;
 
 /**
