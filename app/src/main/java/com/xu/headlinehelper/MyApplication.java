@@ -2,7 +2,9 @@ package com.xu.headlinehelper;
 
 import android.app.Application;
 import android.os.Environment;
+import android.text.TextUtils;
 
+import com.alibaba.sdk.android.feedback.impl.FeedbackAPI;
 import com.coorchice.library.ImageEngine;
 import com.lzy.okgo.OkGo;
 import com.lzy.okserver.OkDownload;
@@ -10,6 +12,7 @@ import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.xu.headlinehelper.db.dao.DownLoadSettingDbBeanDao;
 import com.xu.headlinehelper.db.dbbean.DownLoadSettingDbBean;
 import com.xu.headlinehelper.di.component.AppComponent;
@@ -19,7 +22,12 @@ import com.xu.headlinehelper.di.module.ApplicationModule;
 import com.xu.headlinehelper.di.module.ClientModule;
 import com.xu.headlinehelper.util.GlideEngine;
 import com.xu.headlinehelper.util.LoggerStrategy;
+import com.xu.headlinehelper.util.SecretConstant;
 import com.xu.headlinehelper.util.TransformUtil;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -49,6 +57,11 @@ public class MyApplication extends Application {
         ImageEngine.install(new GlideEngine(this));
         initLogger();
         initDownload();
+        if (!BuildConfig.DEBUG) {
+            initBugly();
+        }
+        //反馈需要依赖好几个库，暂时注释掉
+        // FeedbackAPI.init(this, SecretConstant.ID_SECRET, SecretConstant.APP_SECRET);
     }
 
     public static AppComponent getAppComponent() {
@@ -72,6 +85,42 @@ public class MyApplication extends Application {
         });
     }
 
+    private void initBugly() {
+        String packageName = getPackageName();
+        String processName = getProcessName(android.os.Process.myPid());
+        CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(this);
+        strategy.setUploadProcess(processName == null || processName.equals(packageName));
+        CrashReport.initCrashReport(this, "c4dca0492b", BuildConfig.DEBUG, strategy);
+    }
+
+    /**
+     * 获取进程名称
+     *
+     * @param pid 进程号
+     * @return 进程名称
+     */
+    private static String getProcessName(int pid) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("/proc/" + pid + "/cmdline"));
+            String processName = reader.readLine();
+            if (!TextUtils.isEmpty(processName)) {
+                processName = processName.trim();
+            }
+            return processName;
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+        return null;
+    }
 
     private void initDownload() {
         Disposable downloadDis = Observable

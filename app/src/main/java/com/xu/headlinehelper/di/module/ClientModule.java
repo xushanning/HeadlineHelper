@@ -3,13 +3,18 @@ package com.xu.headlinehelper.di.module;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.github.yuweiguocn.library.greendao.MigrationHelper;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
+import com.xu.headlinehelper.BuildConfig;
 import com.xu.headlinehelper.db.dao.DaoMaster;
 import com.xu.headlinehelper.db.dao.DaoSession;
 import com.xu.headlinehelper.db.dao.DownLoadSettingDbBeanDao;
+import com.xu.headlinehelper.db.dbmanager.DBHelper;
 import com.xu.headlinehelper.net.HttpConstants;
 import com.xu.headlinehelper.net.VideoApi;
+
+import org.greenrobot.greendao.database.Database;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -91,8 +96,10 @@ public class ClientModule {
     @Provides
     @Singleton
     public DaoSession provideDaoSession(Application application) {
-        DaoMaster.DevOpenHelper mHelper = new DaoMaster.DevOpenHelper(application, "video-helper-db", null);
-        SQLiteDatabase db = mHelper.getWritableDatabase();
+        boolean isDebug = BuildConfig.DEBUG;
+        MigrationHelper.DEBUG = true;
+        DBHelper dbHelper = new DBHelper(application, isDebug ? "video-helper-db" : "video-helper-encrypted.db", null);
+        Database db = isDebug ? dbHelper.getWritableDb() : dbHelper.getEncryptedWritableDb("321654");
         DaoMaster mDaoMaster = new DaoMaster(db);
         return mDaoMaster.newSession();
     }
