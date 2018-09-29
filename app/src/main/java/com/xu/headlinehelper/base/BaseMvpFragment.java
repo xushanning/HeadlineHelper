@@ -26,17 +26,7 @@ public abstract class BaseMvpFragment<T extends IPresenter> extends BaseFragment
     @Inject
     protected T mPresenter;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ActivityComponent activityComponent = DaggerActivityComponent
-                .builder()
-                .appComponent(MyApplication.getAppComponent())
-                .activityModule(new ActivityModule())
-                .build();
-        inject(activityComponent);
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
+
 
     @Override
     public void initMvp() {

@@ -7,6 +7,10 @@ import android.support.annotation.Nullable;
 import com.jaeger.library.StatusBarUtil;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xu.headlinehelper.MyApplication;
+import com.xu.headlinehelper.di.component.ActivityComponent;
+import com.xu.headlinehelper.di.component.DaggerActivityComponent;
+import com.xu.headlinehelper.di.module.ActivityModule;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -24,6 +28,13 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IActiv
         setContentView(setLayout());
         StatusBarUtil.setTranslucentForImageViewInFragment(this, 0, null);
         bind = ButterKnife.bind(this);
+        ActivityComponent activityComponent = DaggerActivityComponent
+                .builder()
+                .appComponent(MyApplication.getAppComponent())
+                .activityModule(new ActivityModule())
+                .build();
+        inject(activityComponent);
+        initData(savedInstanceState);
     }
 
     @Override

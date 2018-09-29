@@ -24,16 +24,9 @@ public abstract class BaseMvpActivity<T extends IPresenter> extends BaseActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityComponent activityComponent = DaggerActivityComponent
-                .builder()
-                .appComponent(MyApplication.getAppComponent())
-                .activityModule(new ActivityModule())
-                .build();
-        inject(activityComponent);
         if (mPresenter != null) {
             mPresenter.attachView(this);
         }
-        initData(savedInstanceState);
     }
 
     @Override

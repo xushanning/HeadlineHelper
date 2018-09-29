@@ -2,6 +2,7 @@ package com.xu.headlinehelper.di.component;
 
 import com.xu.headlinehelper.di.module.ActivityModule;
 import com.xu.headlinehelper.di.scope.PerActivity;
+import com.xu.headlinehelper.ui.activity.splash.SplashActivity;
 import com.xu.headlinehelper.ui.activity.main.MainActivity;
 import com.xu.headlinehelper.ui.activity.newtask.NewTaskActivity;
 import com.xu.headlinehelper.ui.activity.settting.SettingActivity;
@@ -16,6 +17,13 @@ import dagger.Component;
 @PerActivity
 @Component(modules = {ActivityModule.class}, dependencies = AppComponent.class)
 public interface ActivityComponent {
+    /**
+     * 注入到导航页
+     *
+     * @param splashActivity 目标activity
+     */
+    void inject(SplashActivity splashActivity);
+
     /**
      * 注入到main中
      *

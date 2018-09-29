@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.components.support.RxFragment;
+import com.xu.headlinehelper.MyApplication;
+import com.xu.headlinehelper.di.component.ActivityComponent;
+import com.xu.headlinehelper.di.component.DaggerActivityComponent;
+import com.xu.headlinehelper.di.module.ActivityModule;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -25,8 +29,14 @@ public abstract class BaseFragment extends RxFragment implements IFragment, IVie
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mView = inflater.inflate(setLayout(), container, false);
         bind = ButterKnife.bind(this, mView);
-        initData(savedInstanceState);
+        ActivityComponent activityComponent = DaggerActivityComponent
+                .builder()
+                .appComponent(MyApplication.getAppComponent())
+                .activityModule(new ActivityModule())
+                .build();
+        inject(activityComponent);
         initMvp();
+        initData(savedInstanceState);
         return mView;
     }
 
